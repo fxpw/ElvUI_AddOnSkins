@@ -9,10 +9,11 @@ if not AS:IsAddonLODorEnabled("VanasKoS") then return end
 
 S:AddCallbackForAddon("VanasKoS", "VanasKoS", function()
 	if not E.private.addOnSkins.VanasKoS then return end
-
-	S:HandleTab(FriendsFrameTab6)
-	FriendsFrameTab6:ClearAllPoints()
-	FriendsFrameTab6:Point("TOPLEFT", FriendsFrameTab5, "TOPRIGHT", -15, 0)
+	if FriendsFrameTab6 then
+		S:HandleTab(FriendsFrameTab6)
+		FriendsFrameTab6:ClearAllPoints()
+		FriendsFrameTab6:Point("TOPLEFT", FriendsFrameTab5, "TOPRIGHT", -15, 0)
+	end
 
 	E:GetModule("Tooltip"):HookScript(VanasKoSListTooltip, "OnShow", "SetStyle")
 
