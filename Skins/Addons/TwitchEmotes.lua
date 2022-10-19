@@ -9,10 +9,10 @@ local AS = E:GetModule("AddOnSkins")
 if not AS:IsAddonLODorEnabled("TwitchEmotes") then return end
 
 
-S:AddCallbackForAddon("TwitchEmotes", "TwitchEmotes", function()
-	if not E.private.addOnSkins.TwitchEmotes then return end
-	L_DropDownList1:SetTemplate("Transparent")
-	L_DropDownList2:SetTemplate("Transparent")
-	L_DropDownList1MenuBackdrop:SetTemplate("Transparent")
-	L_DropDownList2MenuBackdrop:SetTemplate("Transparent")
-	end)
+-- S:AddCallbackForAddon("TwitchEmotes", "TwitchEmotes", function()
+-- 	if not E.private.addOnSkins.TwitchEmotes then return end
+-- 	-- L_DropDownList1:SetTemplate("Transparent")
+-- 	-- L_DropDownList2:SetTemplate("Transparent")
+-- 	-- L_DropDownList1MenuBackdrop:SetTemplate("Transparent")
+-- 	-- L_DropDownList2MenuBackdrop:SetTemplate("Transparent")
+-- end)

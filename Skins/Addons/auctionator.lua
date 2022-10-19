@@ -14,7 +14,7 @@ local _G = _G
 
 
 local function HandleSellItemButton(self)
-	if not self.IsSkinned then
+	-- if not self.IsSkinned then
 		self.IconBorder:Hide()
 		self.IconBorder2 = CreateFrame("Frame", nil, self)
 		self.IconBorder2:SetTemplate()
@@ -30,8 +30,8 @@ local function HandleSellItemButton(self)
 		self.Icon:SetTexCoord(unpack(E.TexCoords))
 		self.Text:SetDrawLayer("BORDER")
 		self.Text:SetText(self.itemInfo.count)
-		self.IsSkinned = true
-	end
+		-- self.IsSkinned = true
+	-- end
 end
 
 
