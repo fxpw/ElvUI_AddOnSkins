@@ -423,8 +423,12 @@ S:AddCallbackForAddon("DBM-Core", "DBM-Core", function()
 	end
 
 	if backportVersion2 then
-		hooksecurefunc(DBT, "CreateBar", skinBars)
-		hooksecurefunc(DBTST, "CreateBar", skinBarsST)
+		if DBT then
+			hooksecurefunc(DBT, "CreateBar", skinBars)
+		end
+		if DBTST then
+			hooksecurefunc(DBTST, "CreateBar", skinBarsST)
+		end
 	else
 		S:SecureHook(DBT, "CreateBar", function(self)
 			local hooked
