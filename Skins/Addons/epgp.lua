@@ -5,7 +5,7 @@ local AS = E:GetModule("AddOnSkins")
 -- local epgpaisload = IsAddOnLoaded("EPGPAttandance")
 
 if not AS:IsAddonLODorEnabled("epgp") then return end
-
+local EPAuc = false
 local function epgpat_onshow()
 	-- if EPGPAttendanceFrame then
 	-- 	if EPGPAttendanceFrame:IsShown() then
@@ -85,7 +85,6 @@ S:AddCallbackForAddon("epgp", "epgp", function()
 
 	local function SkinEPGP()
 		-- Main Frame
-		local EPAuc = false
 		if GetAddOnMetadata("EPGP","Version") == "6.01" then
 			EPAuc = true
 		end
@@ -96,10 +95,9 @@ S:AddCallbackForAddon("epgp", "epgp", function()
 
 		S:SetUIPanelWindowInfo(EPGPFrame, "width", nil, nil, nil, true)
 		S:SetBackdropHitRect(EPGPFrame)
-		-- for  https://github.com/fxpw/EPGP_Tralala_Edition
+		-- for https://github.com/fxpw/EPGP
 		local num = select("#",EPGPFrame:GetChildren())
-		local closeButton, checkBoxBorder, main
-		local _
+		local closeButton, checkBoxBorder, main, _
 		if num == 8 then
 			closeButton, checkBoxBorder, _, _, _,_, main = EPGPFrame:GetChildren()
 		else
@@ -147,7 +145,7 @@ S:AddCallbackForAddon("epgp", "epgp", function()
 		end
 		S:HandleButton(logButton)
 		S:HandleButton(decay)
-
+		-- logButton:ClearAllPoints()
 		logButton:Point("BOTTOMRIGHT", -5, 0)
 		decay:Point("RIGHT", logButton, "LEFT", -3, 0)
 
@@ -270,11 +268,23 @@ S:AddCallbackForAddon("epgp", "epgp", function()
 		EPGPLogFrame:StripTextures()
 		EPGPLogFrame:SetTemplate("Transparent")
 		EPGPLogFrame:Height(424)
-		EPGPLogFrame:SetMinResize(540, 424)
-		EPGPLogFrame:SetMaxResize(1200, 424)
+		-- EPGPLogFrame:SetMinResize(600, 424)
+		-- EPGPLogFrame:SetMaxResize(1200, 424)
 		EPGPLogFrame:Point("TOPLEFT", EPGPFrame, "TOPRIGHT", -33, -12)
 
-		local sizer, closeButton2, export, import, trimLog, undo, redo, scrollParent = EPGPLogFrame:GetChildren()
+		num = select("#",EPGPLogFrame:GetChildren())
+		local searchBox, searchButt, sizer, closeButton2, export, import, trimLog, undo, redo, scrollParent
+		if num == 11 then
+			searchBox, searchButt, sizer, closeButton2, export, import, trimLog, undo, redo, scrollParent = EPGPLogFrame:GetChildren()
+			S:HandleEditBox(searchBox)
+			searchBox:Height(20)
+			searchBox:ClearAllPoints()
+			searchBox:SetPoint("TOPLEFT", EPGPLogFrame, "TOPLEFT", 23, -5)
+			searchBox:SetPoint("TOPRIGHT", EPGPLogFrame, "TOPRIGHT", -117, -5)
+			S:HandleButton(searchButt)
+		else
+			sizer, closeButton2, export, import, trimLog, undo, redo, scrollParent = EPGPLogFrame:GetChildren()
+		end
 
 		S:HandleCloseButton(closeButton2, EPGPLogFrame)
 
@@ -302,15 +312,16 @@ S:AddCallbackForAddon("epgp", "epgp", function()
 		S:HandleButton(undo)
 		S:HandleButton(redo)
 
-		export:Point("BOTTOMLEFT", 8, 8)
-		import:Point("LEFT", export, "RIGHT", 3, 0)
+		-- export:Point("BOTTOMLEFT", 8, 8)
+		-- import:Point("LEFT", export, "RIGHT", 3, 0)
 
-		undo:Point("BOTTOMRIGHT", -8, 8)
-		redo:Point("RIGHT", undo, "LEFT", -3, 0)
+		-- undo:Point("BOTTOMRIGHT", -8, 8)
+		-- redo:Point("RIGHT", undo, "LEFT", -3, 0)
 
 		sizer:Size(14)
 
 		local line1, line2 = sizer:GetRegions()
+		-- print(line1, line2)
 		line1:Size(12)
 		line1:Point("BOTTOMRIGHT", -1, 1)
 		line2:Size(8)
