@@ -59,6 +59,7 @@
 	<Script file="tradeskillInfo.lua"/>
 	<Script file="pab.lua"/>
 	<Script file="epgp.lua"/>
+	<Script file="EPGP_Auction.lua"/>
 	<Script file="epgp_lootmaster.lua"/>
 	<Script file="raidRoll.lua"/>
 	<Script file="raidCooldowns.lua"/>
@@ -103,5 +104,5 @@
 	<Script file="BigBrother.lua"/>
 	<Script file="ItemRack.lua"/>
 	<Script file="EavesDrop.lua"/>
-	
+
 </Ui>

@@ -69,6 +69,7 @@ local addonList = {
 	"TradeskillInfo",
 	"PAB",
 	"EPGP",
+	"EPGP_Auction",
 	"EPGP_LootMaster",
 	"RaidRoll",
 	"RaidCooldowns",
