@@ -5,7 +5,7 @@ local AS = E:GetModule("AddOnSkins")
 -- local epgpaisload = IsAddOnLoaded("EPGPAttandance")
 
 if not AS:IsAddonLODorEnabled("EPGP_Auction") then return end
-local EPAuc = false
+local EPAuc = true
 local function epgpat_onshow()
 	-- if EPGPAttendanceFrame then
 	-- 	if EPGPAttendanceFrame:IsShown() then
@@ -85,9 +85,9 @@ S:AddCallbackForAddon("EPGP_Auction", "EPGP_Auction", function()
 
 	local function SkinEPGP()
 		-- Main Frame
-		if GetAddOnMetadata("EPGP_Auction","Version") == "6.01" then
-			EPAuc = true
-		end
+		-- if GetAddOnMetadata("EPGP_Auction","Version") == "6.01" then
+		-- 	EPAuc = true
+		-- end
 		EPGPFrame:StripTextures()
 		EPGPFrame:CreateBackdrop("Transparent")
 		EPGPFrame.backdrop:Point("TOPLEFT", 11, -12)
@@ -168,16 +168,6 @@ S:AddCallbackForAddon("EPGP_Auction", "EPGP_Auction", function()
 
 		S:HandleDropDownBox(EPGPSideFrameEPControlDropDown, 190)
 
-		if not EPAuc then
-			S:HandleDropDownBox(EPGPSideFrameGPControlDropDown, 190)
-			S:HandleEditBox(EPGPSideFrameGPControlEditBox)
-			EPGPSideFrameGPControlEditBox:Height(22)
-
-			local parentFrame = EPGPSideFrameGPControlEditBox:GetParent()
-				S:HandleButton(parentFrame.button)
-				EPGPSideFrameGPControlEditBox:Point("RIGHT", parentFrame.button, "LEFT", -4, 0)
-				parentFrame.button:Point("RIGHT", EPGPSideFrameGPControlDropDown, "RIGHT", -8, 0)
-		end
 		S:HandleEditBox(EPGPSideFrameEPControlOtherEditBox)
 		S:HandleEditBox(EPGPSideFrameEPControlEditBox)
 
@@ -226,43 +216,6 @@ S:AddCallbackForAddon("EPGP_Auction", "EPGP_Auction", function()
 		parentFrame.decButton:Point("RIGHT", -13, 0)
 		parentFrame.incButton:Point("RIGHT", parentFrame.decButton, "LEFT", -5, 0)
 
-
-		-- shrek best part Side Frame
-		if EPGPSideFrame3 then
-			EPGPSideFrame3:EnableMouse(true)
-			EPGPSideFrame3:SetTemplate("Transparent")
-			EPGPSideFrame3:Point("BOTTOMLEFT", EPGPFrame, "BOTTOMRIGHT", -33, 76)
-
-			S:HandleCloseButton(EPGPSideFrame3:GetChildren(), EPGPSideFrame3)
-
-			S:HandleDropDownBox(EPGPSideFrame3EPControlDropDown, 190)
-
-			S:HandleEditBox(EPGPSideFrame3EPControlOtherEditBox)
-			S:HandleEditBox(EPGPSideFrame3EPControlEditBox)
-
-			EPGPSideFrame3EPControlOtherEditBox:Point("RIGHT", -14, 0)
-			EPGPSideFrame3EPControlOtherEditBox:Height(22)
-			EPGPSideFrame3EPControlEditBox:Height(22)
-
-			parentFrame = EPGPSideFrame3EPControlEditBox:GetParent()
-
-			S:HandleButton(parentFrame.button)
-			parentFrame.button:Point("RIGHT", EPGPSideFrame3EPControlOtherEditBox, "RIGHT", 1, 0)
-			EPGPSideFrame3EPControlEditBox:Point("RIGHT", parentFrame.button, "LEFT", -4, 0)
-
-			S:HandleCheckBox(parentFrame.recurring)
-			parentFrame.recurring:Point("TOP", EPGPSideFrame3EPControlEditBox, "BOTTOMLEFT", 0, -6)
-
-			S:HandleNextPrevButton(parentFrame.decButton, "down")
-			parentFrame.decButton:Size(18)
-
-			S:HandleNextPrevButton(parentFrame.incButton, "up")
-			parentFrame.incButton:Size(18)
-
-			parentFrame.decButton:Point("TOP", parentFrame.recurring, "TOP", 0, -3)
-			parentFrame.decButton:Point("RIGHT", -13, 0)
-			parentFrame.incButton:Point("RIGHT", parentFrame.decButton, "LEFT", -5, 0)
-		end
 		-- Log Frame
 		EPGPLogFrame:EnableMouse(true)
 		EPGPLogFrame:StripTextures()
@@ -274,7 +227,7 @@ S:AddCallbackForAddon("EPGP_Auction", "EPGP_Auction", function()
 
 		num = select("#",EPGPLogFrame:GetChildren())
 		local searchBox, searchButt, sizer, closeButton2, export, import, trimLog, undo, redo, scrollParent
-		if num == 11 then
+		if num == 10 then
 			searchBox, searchButt, sizer, closeButton2, export, import, trimLog, undo, redo, scrollParent = EPGPLogFrame:GetChildren()
 			S:HandleEditBox(searchBox)
 			searchBox:Height(20)
