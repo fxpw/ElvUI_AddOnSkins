@@ -74,28 +74,31 @@ S:AddCallbackForAddon("FishingBuddy", "FishingBuddy", function()
 	end)
 
 	local optionTabs = {
-		FishingBuddyOptionTab1,
-		FishingBuddyOptionTab2,
-		FishingBuddyOptionTab3
+		"FishingBuddyOptionTab1",
+		"FishingBuddyOptionTab2",
+		"FishingBuddyOptionTab3"
 	}
-
-	FishingBuddyOptionTab1:Point("TOPLEFT", FishingOptionsFrame, "TOPRIGHT", -33, -65)
-	FishingBuddyOptionTab1.ClearAllPoints = E.noop
-	FishingBuddyOptionTab1.SetPoint = E.noop
-
+	if FishingBuddyOptionTab1 then
+		FishingBuddyOptionTab1:Point("TOPLEFT", FishingOptionsFrame, "TOPRIGHT", -33, -65)
+		FishingBuddyOptionTab1.ClearAllPoints = E.noop
+		FishingBuddyOptionTab1.SetPoint = E.noop
+	end
 	for _, frame in ipairs(optionTabs) do
-		frame:SetTemplate("Default")
-		frame:StyleButton()
-		frame:DisableDrawLayer("BACKGROUND")
-		frame:GetNormalTexture():SetInside(frame.backdrop)
-		frame:GetNormalTexture():SetTexCoord(unpack(E.TexCoords))
+		frame = _G[frame]
+		if frame then
+			frame:SetTemplate("Default")
+			frame:StyleButton()
+			frame:DisableDrawLayer("BACKGROUND")
+			frame:GetNormalTexture():SetInside(frame.backdrop)
+			frame:GetNormalTexture():SetTexCoord(unpack(E.TexCoords))
 
-		frame:HookScript("OnClick", function(self)
-			if not self.isSkinned then
-				SkinCheckBoxes()
-				self.isSkinned = true
-			end
-		end)
+			frame:HookScript("OnClick", function(self)
+				if not self.isSkinned then
+					SkinCheckBoxes()
+					self.isSkinned = true
+				end
+			end)
+		end
 	end
 
 	for i = 0, 21 do

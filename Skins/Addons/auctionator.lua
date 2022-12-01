@@ -236,9 +236,10 @@ local function HandleFirstAucTab()
 				S:HandleButton(_G[button])
 			end
 		end
-
-		AuctionatorShoppingListFrameResultsListingHeaderContainerPoolFrameAuctionatorStringColumnHeaderTemplate1:ClearAllPoints()
-		AuctionatorShoppingListFrameResultsListingHeaderContainerPoolFrameAuctionatorStringColumnHeaderTemplate1:SetPoint("BOTTOMLEFT", 15, 4)
+		if AuctionatorShoppingListFrameResultsListingHeaderContainerPoolFrameAuctionatorStringColumnHeaderTemplate1 then
+			AuctionatorShoppingListFrameResultsListingHeaderContainerPoolFrameAuctionatorStringColumnHeaderTemplate1:ClearAllPoints()
+			AuctionatorShoppingListFrameResultsListingHeaderContainerPoolFrameAuctionatorStringColumnHeaderTemplate1:SetPoint("BOTTOMLEFT", 15, 4)
+		end
 	local dropdowns = {
 		"AuctionatorShoppingListFrameListDropdown",
 		}
@@ -454,8 +455,9 @@ local function HandleThirdAucTab()
 			S:HandleButton(button)
 		end
 	end
-
-	AuctionatorCancellingFrameResultsListingHeaderContainerPoolFrameAuctionatorStringColumnHeaderTemplate2:SetText("Кол-во")
+	if AuctionatorCancellingFrameResultsListingHeaderContainerPoolFrameAuctionatorStringColumnHeaderTemplate2 then
+		AuctionatorCancellingFrameResultsListingHeaderContainerPoolFrameAuctionatorStringColumnHeaderTemplate2:SetText("Кол-во")
+	end
 
 	local editboxes = {
 		"AuctionatorCancellingFrameSearchFilter",
