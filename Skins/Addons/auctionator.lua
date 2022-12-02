@@ -441,22 +441,19 @@ local function HandleThirdAucTab()
 	local buttons = {
 		"AuctionatorCancellingFrameScanStartScanButton",
 		"AuctionatorCancelUndercutButton",
-		"AuctionatorCancellingFrameResultsListingHeaderContainerPoolFrameAuctionatorStringColumnHeaderTemplate1",
-		"AuctionatorCancellingFrameResultsListingHeaderContainerPoolFrameAuctionatorStringColumnHeaderTemplate2",
-		"AuctionatorCancellingFrameResultsListingHeaderContainerPoolFrameAuctionatorStringColumnHeaderTemplate3",
-		"AuctionatorCancellingFrameResultsListingHeaderContainerPoolFrameAuctionatorStringColumnHeaderTemplate4",
-		"AuctionatorCancellingFrameResultsListingHeaderContainerPoolFrameAuctionatorStringColumnHeaderTemplate5",
-		"AuctionatorCancellingFrameResultsListingHeaderContainerPoolFrameAuctionatorStringColumnHeaderTemplate6",
-		"AuctionatorCancellingFrameResultsListingHeaderContainerPoolFrameAuctionatorStringColumnHeaderTemplate7",
+		-- "AuctionatorCancellingFrameResultsListingHeaderContainerPoolFrameAuctionatorStringColumnHeaderTemplate1",
+		-- "AuctionatorCancellingFrameResultsListingHeaderContainerPoolFrameAuctionatorStringColumnHeaderTemplate2",
+		-- "AuctionatorCancellingFrameResultsListingHeaderContainerPoolFrameAuctionatorStringColumnHeaderTemplate3",
+		-- "AuctionatorCancellingFrameResultsListingHeaderContainerPoolFrameAuctionatorStringColumnHeaderTemplate4",
+		-- "AuctionatorCancellingFrameResultsListingHeaderContainerPoolFrameAuctionatorStringColumnHeaderTemplate5",
+		-- "AuctionatorCancellingFrameResultsListingHeaderContainerPoolFrameAuctionatorStringColumnHeaderTemplate6",
+		-- "AuctionatorCancellingFrameResultsListingHeaderContainerPoolFrameAuctionatorStringColumnHeaderTemplate7",
 	}
 	for _,button in ipairs(buttons) do
 		button = _G[button]
 		if button then
 			S:HandleButton(button)
 		end
-	end
-	if AuctionatorCancellingFrameResultsListingHeaderContainerPoolFrameAuctionatorStringColumnHeaderTemplate2 then
-		AuctionatorCancellingFrameResultsListingHeaderContainerPoolFrameAuctionatorStringColumnHeaderTemplate2:SetText("Кол-во")
 	end
 
 	local editboxes = {
@@ -549,7 +546,15 @@ end
 S:AddCallbackForAddon("Auctionator", "Auctionator", function()
 	if not E.private.addOnSkins.Auctionator then return end
 
-
+	hooksecurefunc(AuctionatorMultisellProgress,'OnShow',function(self)
+		-- S:HandleStatusBar(AuctionHouseMultisellProgressFrame)
+		-- AuctionHouseMultisellProgressFrame:StripTextures()
+		-- AuctionHouseMultisellProgressFrame:CreateBackdrop()
+		S:HandleFrame(AuctionHouseMultisellProgressFrame,true,true,true)
+		S:HandleStatusBar(AuctionHouseMultisellProgressFrame.ProgressBar)
+		S:HandleIcon(AuctionHouseMultisellProgressFrame.ProgressBar.Icon)
+		S:HandleCloseButton(AuctionHouseMultisellProgressFrame.CancelButton)
+	end)
 	hooksecurefunc(AuctionatorTabContainerMixin,"OnLoad",function(self,...)
 
 		S:HandleTab(AuctionatorTabs_ShoppingLists)
@@ -563,9 +568,15 @@ S:AddCallbackForAddon("Auctionator", "Auctionator", function()
 		HandleSecAucTab()
 		HandleThirdAucTab()
 		HandleFourAucTab()
-
 	end)
-
+	-- AuctionatorTabMixin:Initialize(
+		-- AuctionatorResultsListingMixin:UpdateTable()
+	hooksecurefunc(AuctionatorStringColumnHeaderTemplateMixin,"Init",function(self)
+		S:HandleButton(self)
+		if self:GetText() == "Количество" then
+			self:SetText("Кол-во")
+		end
+	end)
 
 	hooksecurefunc(Auctionator.ReagentSearch,"InitializeSearchButton",function()
 		S:HandleButton(AuctionatorTradeSkillSearch)
@@ -573,7 +584,7 @@ S:AddCallbackForAddon("Auctionator", "Auctionator", function()
 
 
 	hooksecurefunc(AuctionatorBagClassListingMixin,"UpdateForEmpty",function(self)
-		for index, button in ipairs(self.buttons) do
+		for _, button in ipairs(self.buttons) do
 			HandleSellItemButton(button)
 		end
 	end)
