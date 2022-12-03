@@ -226,20 +226,20 @@ local function HandleFirstAucTab()
 		"AuctionatorShoppingListFrameExportCSV",
 		"AuctionatorShoppingListFrameManualSearch",
 		"AuctionatorShoppingListFrameAddItem",
-		"AuctionatorShoppingListFrameResultsListingHeaderContainerPoolFrameAuctionatorStringColumnHeaderTemplate1",
-		"AuctionatorShoppingListFrameResultsListingHeaderContainerPoolFrameAuctionatorStringColumnHeaderTemplate2",
-		"AuctionatorShoppingListFrameResultsListingHeaderContainerPoolFrameAuctionatorStringColumnHeaderTemplate3",
-		"AuctionatorShoppingListFrameResultsListingHeaderContainerPoolFrameAuctionatorStringColumnHeaderTemplate4",
+		-- "AuctionatorShoppingListFrameResultsListingHeaderContainerPoolFrameAuctionatorStringColumnHeaderTemplate1",
+		-- "AuctionatorShoppingListFrameResultsListingHeaderContainerPoolFrameAuctionatorStringColumnHeaderTemplate2",
+		-- "AuctionatorShoppingListFrameResultsListingHeaderContainerPoolFrameAuctionatorStringColumnHeaderTemplate3",
+		-- "AuctionatorShoppingListFrameResultsListingHeaderContainerPoolFrameAuctionatorStringColumnHeaderTemplate4",
 		}
 		for _, button in ipairs(buttons) do
 			if _G[button] then
 				S:HandleButton(_G[button])
 			end
 		end
-		if AuctionatorShoppingListFrameResultsListingHeaderContainerPoolFrameAuctionatorStringColumnHeaderTemplate1 then
-			AuctionatorShoppingListFrameResultsListingHeaderContainerPoolFrameAuctionatorStringColumnHeaderTemplate1:ClearAllPoints()
-			AuctionatorShoppingListFrameResultsListingHeaderContainerPoolFrameAuctionatorStringColumnHeaderTemplate1:SetPoint("BOTTOMLEFT", 15, 4)
-		end
+		-- if AuctionatorShoppingListFrameResultsListingHeaderContainerPoolFrameAuctionatorStringColumnHeaderTemplate1 then
+		-- 	AuctionatorShoppingListFrameResultsListingHeaderContainerPoolFrameAuctionatorStringColumnHeaderTemplate1:ClearAllPoints()
+		-- 	AuctionatorShoppingListFrameResultsListingHeaderContainerPoolFrameAuctionatorStringColumnHeaderTemplate1:SetPoint("BOTTOMLEFT", 15, 4)
+		-- end
 	local dropdowns = {
 		"AuctionatorShoppingListFrameListDropdown",
 		}
