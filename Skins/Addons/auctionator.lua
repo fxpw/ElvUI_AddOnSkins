@@ -10,9 +10,6 @@ local _G = _G
 
 
 
-
-
-
 local function HandleSellItemButton(self)
 	-- if not self.IsSkinned then
 		self.IconBorder:Hide()
