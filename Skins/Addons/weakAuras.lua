@@ -11,48 +11,50 @@ S:AddCallbackForAddon("WeakAuras", "WeakAuras", function()
 
 		-- WeakAurasOptions:StripTextures()
 		-- WeakAurasOptions:CreateBackdrop()
-		hooksecurefunc(WeakAuras,"OpenOptions", function()
-			if not WeakAurasOptions.ElvUISkin then
-				WeakAurasOptions:StripTextures();
-				WeakAurasOptions:CreateBackdrop("Transparent");
-				S:HandleEditBox(WeakAurasFilterInput);
-				WeakAurasOptions.ElvUISkin = true;
-				local close, waTitle, leftSizer, rightSizer, min = WeakAurasOptions:GetChildren();
-				close:StripTextures();
-				local closeButton = close:GetChildren();
-				S:HandleCloseButton(closeButton);
-				waTitle:StripTextures();
-				waTitle:CreateBackdrop("Transparent");
-				min:StripTextures();
-				local minButton = min:GetChildren();
-				minButton:Size(25)
-				local Normal,  Pushed = minButton:GetNormalTexture(),  minButton:GetPushedTexture()
-				minButton:SetNormalTexture(E.Media.Textures.ArrowUp)
-				minButton:SetPushedTexture(E.Media.Textures.ArrowUp)
+		if WeakAuras and WeakAuras.OpenOptions then
+			hooksecurefunc(WeakAuras,"OpenOptions", function()
+				if not WeakAurasOptions.ElvUISkin then
+					WeakAurasOptions:StripTextures();
+					WeakAurasOptions:CreateBackdrop("Transparent");
+					S:HandleEditBox(WeakAurasFilterInput);
+					WeakAurasOptions.ElvUISkin = true;
+					local close, waTitle, leftSizer, rightSizer, min = WeakAurasOptions:GetChildren();
+					close:StripTextures();
+					local closeButton = close:GetChildren();
+					S:HandleCloseButton(closeButton);
+					waTitle:StripTextures();
+					waTitle:CreateBackdrop("Transparent");
+					min:StripTextures();
+					local minButton = min:GetChildren();
+					minButton:Size(25)
+					local Normal,  Pushed = minButton:GetNormalTexture(),  minButton:GetPushedTexture()
+					minButton:SetNormalTexture(E.Media.Textures.ArrowUp)
+					minButton:SetPushedTexture(E.Media.Textures.ArrowUp)
 
-				Normal:SetRotation(S.ArrowRotation[WeakAurasOptions.minimized and "down" or "up"])
-				Pushed:SetRotation(S.ArrowRotation[WeakAurasOptions.minimized and "down" or "up"])
-
-
-
-				minButton:HookScript("OnClick", function(self)
-					self:Size(25)
-					Normal, Pushed = self:GetNormalTexture(), self:GetPushedTexture()
-					self:SetNormalTexture(E.Media.Textures.ArrowUp)
-					self:SetPushedTexture(E.Media.Textures.ArrowUp)
 					Normal:SetRotation(S.ArrowRotation[WeakAurasOptions.minimized and "down" or "up"])
 					Pushed:SetRotation(S.ArrowRotation[WeakAurasOptions.minimized and "down" or "up"])
 
-				  end)
-				-- minButton:StripTextures();
-				-- local dropdownArrowColor = {1, 0.8, 0};
-				-- S:HandleNextPrevButton(minButton, "up", dropdownArrowColor);
-				-- minButton:Size(25);
-				-- test:StripTextures()
-				-- S:HandleButton(closeButton)
-				-- S:HandleCloseButton(close)
-			end
-		end)
+
+
+					minButton:HookScript("OnClick", function(self)
+						self:Size(25)
+						Normal, Pushed = self:GetNormalTexture(), self:GetPushedTexture()
+						self:SetNormalTexture(E.Media.Textures.ArrowUp)
+						self:SetPushedTexture(E.Media.Textures.ArrowUp)
+						Normal:SetRotation(S.ArrowRotation[WeakAurasOptions.minimized and "down" or "up"])
+						Pushed:SetRotation(S.ArrowRotation[WeakAurasOptions.minimized and "down" or "up"])
+
+					end)
+					-- minButton:StripTextures();
+					-- local dropdownArrowColor = {1, 0.8, 0};
+					-- S:HandleNextPrevButton(minButton, "up", dropdownArrowColor);
+					-- minButton:Size(25);
+					-- test:StripTextures()
+					-- S:HandleButton(closeButton)
+					-- S:HandleCloseButton(close)
+				end
+			end)
+		end
 		return
 	end
 	local function Skin_WeakAuras(frame, ftype)
