@@ -13,11 +13,11 @@ S:AddCallbackForAddon("WeakAuras", "WeakAuras", function()
 		-- WeakAurasOptions:CreateBackdrop()
 		if WeakAuras and WeakAuras.OpenOptions then
 			hooksecurefunc(WeakAuras,"OpenOptions", function()
-				if not WeakAurasOptions.ElvUISkin then
+				if WeakAurasOptions and not WeakAurasOptions.ElvUISkin then
 					WeakAurasOptions:StripTextures();
 					WeakAurasOptions:CreateBackdrop("Transparent");
 					S:HandleEditBox(WeakAurasFilterInput);
-					WeakAurasOptions.ElvUISkin = true;
+
 					local close, waTitle, leftSizer, rightSizer, min = WeakAurasOptions:GetChildren();
 					close:StripTextures();
 					local closeButton = close:GetChildren();
@@ -52,6 +52,7 @@ S:AddCallbackForAddon("WeakAuras", "WeakAuras", function()
 					-- test:StripTextures()
 					-- S:HandleButton(closeButton)
 					-- S:HandleCloseButton(close)
+					WeakAurasOptions.ElvUISkin = true;
 				end
 			end)
 		end
