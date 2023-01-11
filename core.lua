@@ -115,6 +115,7 @@ local addonList = {
 	"BigBrother",
 	"ItemRack",
 	"EavesDrop",
+	"CharacterNotes",
 
 }
 local addonAlias = {
