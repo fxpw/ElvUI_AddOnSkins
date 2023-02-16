@@ -79,8 +79,14 @@ S:AddCallbackForAddon("AdiBags", "AdiBags", function()
 				S:HandleButton(widget)
 			else
 				widget:StyleButton(true, true)
-				widget:GetNormalTexture():SetTexCoord(unpack(E.TexCoords))
-				widget:GetCheckedTexture():SetTexCoord(unpack(E.TexCoords))
+				-- local nt = widget:GetNormalTexture()
+				if widget:GetNormalTexture() then
+					widget:GetNormalTexture():SetTexCoord(unpack(E.TexCoords))
+				end
+				-- local ct = widget:GetCheckedTexture()
+				if widget:GetNormalTexture() then
+					widget:GetNormalTexture():SetTexCoord(unpack(E.TexCoords))
+				end
 			end
 		elseif widget.editBox and widget.editBox.clearButton then
 			widget.editBox:DisableDrawLayer("BACKGROUND")
