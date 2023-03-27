@@ -8,11 +8,9 @@ local AS = E:GetModule("AddOnSkins")
 if not AS:IsAddonLODorEnabled("RaidBrowser") then return end
 
 
-
-
 S:AddCallbackForAddon("RaidBrowser", "RaidBrowser", function()
 
-	if not E.private.addOnSkins.RaidBrowserRU then return end
+	if not E.private.addOnSkins.RaidBrowser then return end
 	S:HandleTab(LFRParentFrameTab3)
 	S:HandleScrollBar(LFRHistoryFrameScrollFrameScrollBar)
 	LFRHistoryFrameScrollFrameScrollBarBorder:StripTextures()

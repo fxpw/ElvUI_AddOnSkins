@@ -109,7 +109,7 @@ local addonList = {
 	"oRA3",
 	"RCLootCouncil",
 	"QDKP2_GUI",
-	"RaidBrowserRU",
+	"RaidBrowser",
 	"BakerySpammer",
 	"TwitchEmotes",
 	"BigBrother",
