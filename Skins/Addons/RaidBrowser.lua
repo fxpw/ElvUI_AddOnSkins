@@ -2,7 +2,7 @@ local E, L, V, P, G = unpack(ElvUI)
 local S = E:GetModule("Skins")
 local AS = E:GetModule("AddOnSkins")
 
--- Raid Browser RU
+-- Raid Browser
 -- https://github.com/fxpw/RaidBrowser-ru-for-sirus
 
 if not AS:IsAddonLODorEnabled("RaidBrowser") then return end
@@ -32,7 +32,6 @@ S:AddCallbackForAddon("RaidBrowser", "RaidBrowser", function()
 	S:HandleButton(RaidBrowserRaidSetSaveButton)
 	S:HandleCloseButton(BARaidBrowserEditSpecCloseButton)
 	S:HandleButton(BARaidBrowserEditSpecSaveButton)
-	--S:HandleButton(BARaidBrowserEditCurrentSpecButton)
 	BARaidBrowserEditNameEditBox:Height(20)
 	BARaidBrowserEditGearScoreEditBox:Height(20)
 
@@ -41,10 +40,8 @@ S:AddCallbackForAddon("RaidBrowser", "RaidBrowser", function()
 		S:HandleScrollBar(LFRBrowseFrameListScrollFrameScrollBar)
 	end)
 	LFRHistoryFrame:StripTextures()
-	-- local onupdatecheck = false
 
 	LFRParentFrame:HookScript("OnShow",function()
-		-- if not onupdatecheck then
 			for i = 1,6 do
 				local chbx = _G["RBCheckButton"..i]
 				if chbx then
@@ -82,8 +79,6 @@ S:AddCallbackForAddon("RaidBrowser", "RaidBrowser", function()
 			S:HandleButton(_G["RBClearAllButton"])
 			S:HandleDropDownBox(_G["RBNumRaidsDropDown"])
 			end
-			-- onupdatecheck = true
-		-- end
 	end)
 
 
