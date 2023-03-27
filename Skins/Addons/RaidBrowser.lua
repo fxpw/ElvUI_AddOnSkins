@@ -40,6 +40,7 @@ S:AddCallbackForAddon("RaidBrowser", "RaidBrowser", function()
 	LFRBrowseFrameListScrollFrameScrollBar:HookScript("OnShow", function()
 		S:HandleScrollBar(LFRBrowseFrameListScrollFrameScrollBar)
 	end)
+	LFRHistoryFrame:StripTextures()
 	-- local onupdatecheck = false
 
 	LFRParentFrame:HookScript("OnShow",function()
