@@ -17,23 +17,24 @@ local hooksecurefunc = hooksecurefunc
 S:AddCallbackForAddon("DBM-Core", "DBM-Core", function()
 	if not E.private.addOnSkins.DBM then return end
 
-	local backportVersion = DBM.ReleaseRevision > 7000
+	local backportVersion = DBM.ReleaseRevision > 7000 and DBM.ReleaseRevision < 20220631000000
 	local backportVersion2 = DBM.ReleaseRevision >= 20220631000000 -- 9.2.14
 
 	local function createIconOverlay(id, parent)
+		local db = E.db.addOnSkins
 		local frame = CreateFrame("Frame", "$parentIcon" .. id .. "Overlay", parent)
 		frame:SetTemplate()
 
 		if id == 1 then
-			if E.db.addOnSkins.DBMSkinHalf then
-				frame:Point("BOTTOMRIGHT", parent, "BOTTOMLEFT", -10 * (E.Border + E.Spacing), 0)
+			if db.DBMSkinHalf then
+				frame:Point("BOTTOMRIGHT", parent, "BOTTOMLEFT", - db.dbmIconXOffset, 0)
 			else
-				frame:Point("RIGHT", parent, "LEFT", -(E.Border + E.Spacing), 0)
+				frame:Point("RIGHT", parent, "LEFT", - db.dbmIconXOffset, 0)
 			end
-		elseif E.db.addOnSkins.DBMSkinHalf then
-			frame:Point("BOTTOMLEFT", parent, "BOTTOMRIGHT", 10 * (E.Border + E.Spacing), 0)
+		elseif db.DBMSkinHalf then
+			frame:Point("BOTTOMLEFT", parent, "BOTTOMRIGHT", db.dbmIconXOffset, 0)
 		else
-			frame:Point("LEFT", parent, "RIGHT", (E.Border + E.Spacing), 0)
+			frame:Point("LEFT", parent, "RIGHT", db.dbmIconXOffset, 0)
 		end
 
 		local backdroptex = frame:CreateTexture(nil, "BORDER")
@@ -122,7 +123,7 @@ S:AddCallbackForAddon("DBM-Core", "DBM-Core", function()
 			timer:Point("RIGHT", -5, 0)
 		end
 
-		if backportVersion then
+		if not backportVersion then
 			name:SetFont(self._font, fontSize, db.dbmFontOutline)
 			timer:SetFont(self._font, fontSize, db.dbmFontOutline)
 		end
@@ -196,7 +197,7 @@ S:AddCallbackForAddon("DBM-Core", "DBM-Core", function()
 					timer:SetShadowColor(0, 0, 0, 0)
 
 					if db.DBMSkinHalf then
-						name:SetPoint("BOTTOMLEFT", frame, "TOPLEFT", 0, 3)
+						name:SetPoint("BOTTOMLEFT", frame, "TOPLEFT", 0, db.dbmBarTextYOffset)
 						name:SetPoint("BOTTOMRIGHT", timer, "BOTTOMLEFT") -- truncation
 						timer:SetPoint("BOTTOMRIGHT", frame, "TOPRIGHT", -1, 1)
 					else
@@ -595,7 +596,11 @@ S:AddCallbackForAddon("DBM-GUI", "DBM-GUI", function()
 		for _, button in ipairs(DBM_GUI_OptionsFrameList.buttons) do
 			S:HandleCollapseTexture(button.toggle)
 		end
-
+		-- Panel Container FOV Scrollbar backdrop
+		local child = select(3, DBM_GUI_OptionsFramePanelContainerFOVScrollBar:GetChildren())
+		if child and child:IsObjectType("Frame") then
+			child:StripTextures()
+		end
 		-- Dropdown list & scrollbar
 		DBM_GUI_DropDownList:StripTextures() -- removes UI-Tooltip-Border
 		S:HandleScrollBar(DBM_GUI_DropDownListScrollBar) -- original position and size are ruined, so rebuild them below
@@ -610,6 +615,7 @@ S:AddCallbackForAddon("DBM-GUI", "DBM-GUI", function()
 		if backportVersion2 then
 			DBM_GUI_OptionsFrameList:StripTextures()
 			DBM_GUI_OptionsFrameList:SetTemplate("Transparent")
+			DBM_GUI_OptionsFrameListList:StripTextures()
 			S:HandleScrollBar(DBM_GUI_OptionsFrameListListScrollBar)
 			DBM_GUI_OptionsFrameListListScrollBar:Point("TOPRIGHT", 1, -18)
 			DBM_GUI_OptionsFrameListListScrollBar:Point("BOTTOMLEFT", 7, 18)
