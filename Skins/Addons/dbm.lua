@@ -161,7 +161,7 @@ S:AddCallbackForAddon("DBM-Core", "DBM-Core", function()
 					local icon2 = _G[frame:GetName().."BarIcon2"]
 					local name = _G[frame:GetName().."BarName"]
 					local timer = _G[frame:GetName().."BarTimer"]
-					local iconSize = (bar.enlarged and DBT.Options.HugeHeight or DBT.Options.Height) * (db.dbmIconSize or 1)
+					local iconSize = (bar.enlarged and DBT.Options.HugeHeight or DBT.Options.Height) * db.dbmIconSize
 					if db.DBMSkinHalf then
 						iconSize = iconSize * 2
 					end
@@ -235,7 +235,7 @@ S:AddCallbackForAddon("DBM-Core", "DBM-Core", function()
 					local icon2 = _G[frame:GetName().."BarIcon2"]
 					local name = _G[frame:GetName().."BarName"]
 					local timer = _G[frame:GetName().."BarTimer"]
-					local iconSize = (bar.enlarged and DBTST.Options.HugeHeight or DBTST.Options.Height) * (db.dbmIconSize or 1)
+					local iconSize = (bar.enlarged and DBTST.Options.HugeHeight or DBTST.Options.Height) * db.dbmIconSize
 					if db.DBMSkinHalf then
 						iconSize = iconSize * 2
 					end
