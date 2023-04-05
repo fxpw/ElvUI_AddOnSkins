@@ -578,7 +578,8 @@ S:AddCallbackForAddon("DBM-GUI", "DBM-GUI", function()
 		S:HandleTab(DBM_GUI_OptionsFrameTab2)
 	end
 
-	DBM_GUI_OptionsFrameTab1:Point("BOTTOMLEFT", backportVersion2 and DBM_GUI_OptionsFrameList or DBM_GUI_OptionsFrameBossMods, "TOPLEFT", 6, -4)
+	DBM_GUI_OptionsFrameTab1:Point("BOTTOMLEFT", backportVersion2 and DBM_GUI_OptionsFrameList or DBM_GUI_OptionsFrameBossMods, "TOPLEFT", 6, -3)
+	DBM_GUI_OptionsFrameTab2:Point("BOTTOMLEFT", backportVersion2 and DBM_GUI_OptionsFrameList or DBM_GUI_OptionsFrameBossMods, "TOPLEFT", 6, -3)
 	DBM_GUI_OptionsFrameTab1Text:SetPoint("CENTER", 0, 0)
 	DBM_GUI_OptionsFrameTab2Text:SetPoint("CENTER", 0, 0)
 
