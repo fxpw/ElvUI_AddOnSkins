@@ -9,7 +9,7 @@ if not AS:IsAddonLODorEnabled("RaidBrowser") then return end
 
 
 S:AddCallbackForAddon("RaidBrowser", "RaidBrowser", function()
-
+	if true then return end
 	if not E.private.addOnSkins.RaidBrowser then return end
 	S:HandleTab(LFRParentFrameTab3)
 	S:HandleScrollBar(LFRHistoryFrameScrollFrameScrollBar)
@@ -42,43 +42,43 @@ S:AddCallbackForAddon("RaidBrowser", "RaidBrowser", function()
 	LFRHistoryFrame:StripTextures()
 
 	LFRParentFrame:HookScript("OnShow",function()
-			for i = 1,6 do
-				local chbx = _G["RBCheckButton"..i]
-				if chbx then
-					S:HandleCheckBox(chbx)
-				end
+		for i = 1,6 do
+			local chbx = _G["RBCheckButton"..i]
+			if chbx then
+				S:HandleCheckBox(chbx)
 			end
-			local editboxes = {
-				"RBTankEditBox",
-				"RBDDEditBox",
-				"RBHealEditBox",
-				"RBAnrolText",
-				"RBDInfoText"
-			}
-			for _,eb in ipairs(editboxes) do
-				local edbox =  _G[eb]
-				if edbox then
-					S:HandleEditBox(edbox)
-				end
+		end
+		local editboxes = {
+			"RBTankEditBox",
+			"RBDDEditBox",
+			"RBHealEditBox",
+			"RBAnrolText",
+			"RBDInfoText"
+		}
+		for _,eb in ipairs(editboxes) do
+			local edbox =  _G[eb]
+			if edbox then
+				S:HandleEditBox(edbox)
 			end
-			local sliders = {
-				"RBTankSlider",
-				"RBDDSlider",
-				"RBHealSlider",
-				"RBILVLSlider",
-				"RBSpamTimerSlider"
-			}
-			for _,slider in ipairs(sliders) do
-				local sl =  _G[slider]
-				if sl then
-					S:HandleSliderFrame(sl)
-				end
+		end
+		local sliders = {
+			"RBTankSlider",
+			"RBDDSlider",
+			"RBHealSlider",
+			"RBILVLSlider",
+			"RBSpamTimerSlider"
+		}
+		for _,slider in ipairs(sliders) do
+			local sl =  _G[slider]
+			if sl then
+				S:HandleSliderFrame(sl)
 			end
-			if RBStartSpamButton then
+		end
+		if RBStartSpamButton then
 			S:HandleButton(_G["RBStartSpamButton"])
 			S:HandleButton(_G["RBClearAllButton"])
 			S:HandleDropDownBox(_G["RBNumRaidsDropDown"])
-			end
+		end
 	end)
 
 

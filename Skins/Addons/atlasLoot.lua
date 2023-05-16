@@ -94,7 +94,7 @@ S:AddCallbackForAddon("AtlasLoot", "AtlasLoot", function()
 	S:HandleNextPrevButton(AtlasLootItemsFrame_PREV)
 	S:HandleNextPrevButton(AtlasLootItemsFrame_NEXT)
 
-	AtlasLootItemsFrame_Back:SetTexture()
+	-- AtlasLootItemsFrame_Back:SetTexture()
 
 	AtlasLoot10Man25ManSwitch:Height(24)
 	AtlasLootServerQueryButton:Height(24)
