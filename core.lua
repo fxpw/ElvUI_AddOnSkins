@@ -116,7 +116,7 @@ local addonList = {
 	"ItemRack",
 	"EavesDrop",
 	"CharacterNotes",
-
+	"Immersion",
 }
 local addonAlias = {
 	["DBM"] = "DBM-Core",
