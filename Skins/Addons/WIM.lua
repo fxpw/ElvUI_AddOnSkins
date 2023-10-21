@@ -612,7 +612,7 @@ S:AddCallbackForAddon("WIM", "WIM", function()
 		end
 	end
 
-	WIMMenu:HookScript("OnUpdate",wimhookskindialog)
+	-- WIMMenu:HookScript("OnUpdate",wimhookskindialog)
 	-- C_Timer:After(5,function()
 	-- 	if WIM then
 	-- 		WIM:ShowOptions()
