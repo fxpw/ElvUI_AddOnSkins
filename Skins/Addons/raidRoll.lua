@@ -11,8 +11,9 @@ S:AddCallbackForAddon("RaidRoll", "RaidRoll", function()
 	if not E.private.addOnSkins.RaidRoll then return end
 
 	RR_RollFrame:SetTemplate("Transparent")
-	RR_NAME_FRAME:SetTemplate("Default")
-
+	if RR_NAME_FRAME then
+		RR_NAME_FRAME:SetTemplate("Default")
+	end
 	S:HandleCloseButton(RR_Close_Button, RR_RollFrame)
 
 	RaidRoll_Slider_ID:SetHitRectInsets(0, 0, 0, 0)

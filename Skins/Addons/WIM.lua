@@ -595,50 +595,53 @@ S:AddCallbackForAddon("WIM", "WIM", function()
 	local WIMMenu = _G["WIM3Menu"]
 	local WIMGroup1 = _G["WIM3MenuGroup1"]
 	local WIMGroup1T = _G["WIM3MenuGroup1Title"]
-		local function wimhookskindialog(self)
+	local function wimhookskindialog(self)
 
-			self:StripTextures()
-			self:CreateBackdrop("Transparent")
+		self:StripTextures()
+		self:CreateBackdrop("Transparent")
 
-			WIMGroup1:StripTextures()
-			WIMGroup1T:StripTextures()
+		WIMGroup1:StripTextures()
+		WIMGroup1T:StripTextures()
 
-			for i = 1,99 do
-				local button =_G["WIM3MenuButton"..i]
-				if button then
-					S:HandleButton(button)
-				else break
-				end
-			end
-		end
-
-		WIMMenu:HookScript("OnUpdate",wimhookskindialog)
-
-	WIM:ShowOptions()
-	local winopthook = _G["WIM3_Options"]
-
-	local function wimhookskinopt()
-
-		winopthook:StripTextures()
-		winopthook:CreateBackdrop("Transparent")
-		for i = 1,4 do
-			local button = _G["WIM3_OptionsNavCat"..i]
-			if button then
-				S:HandleButton(button)
-			end
-		end
-		for i = 1,13 do
-			local button = _G["WIM3_OptionsNavSubButton"..i]
+		for i = 1,99 do
+			local button =_G["WIM3MenuButton"..i]
 			if button then
 				S:HandleButton(button)
 			else break
 			end
 		end
+	end
+
+	WIMMenu:HookScript("OnUpdate",wimhookskindialog)
+	-- C_Timer:After(5,function()
+	-- 	if WIM then
+	-- 		WIM:ShowOptions()
+	-- 		local winopthook = _G["WIM3_Options"]
+
+	-- 		local function wimhookskinopt()
+
+	-- 			winopthook:StripTextures()
+	-- 			winopthook:CreateBackdrop("Transparent")
+	-- 			for i = 1,4 do
+	-- 				local button = _G["WIM3_OptionsNavCat"..i]
+	-- 				if button then
+	-- 					S:HandleButton(button)
+	-- 				end
+	-- 			end
+	-- 			for i = 1,13 do
+	-- 				local button = _G["WIM3_OptionsNavSubButton"..i]
+	-- 				if button then
+	-- 					S:HandleButton(button)
+	-- 				else break
+	-- 				end
+	-- 			end
 
 
-	end -- end hook
-
-	winopthook:HookScript("OnUpdate",wimhookskinopt)
-
+	-- 		end -- end hook
+	-- 		if winopthook then
+	-- 			winopthook:HookScript("OnUpdate",wimhookskinopt)
+	-- 		end
+	-- 	end
+	-- end)
 
 end)
