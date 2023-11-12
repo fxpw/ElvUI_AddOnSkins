@@ -15,9 +15,10 @@ S:AddCallbackForAddon("RaidRoll", "RaidRoll", function()
 		RR_NAME_FRAME:SetTemplate("Default")
 	end
 	S:HandleCloseButton(RR_Close_Button, RR_RollFrame)
-
-	RaidRoll_Slider_ID:SetHitRectInsets(0, 0, 0, 0)
-	S:HandleSliderFrame(RaidRoll_Slider_ID)
+	if RaidRoll_Slider_ID then
+		RaidRoll_Slider_ID:SetHitRectInsets(0, 0, 0, 0)
+		S:HandleSliderFrame(RaidRoll_Slider_ID)
+	end
 
 	S:HandleButton(RaidRoll_AnnounceWinnerButton)
 	S:HandleButton(RR_Roll_5SecAndAnnounce)
