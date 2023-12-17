@@ -322,14 +322,16 @@ S:AddCallbackForAddon("epgp", "epgp", function()
 
 		local line1, line2 = sizer:GetRegions()
 		-- print(line1, line2)
-		line1:Size(12)
-		line1:Point("BOTTOMRIGHT", -1, 1)
-		line2:Size(8)
-		line2:Point("BOTTOMRIGHT", -1, 1)
-		local x = 0.1 * 14/17
-		line1:SetTexCoord(1/32 - x, 0.5, 1/32, 0.5 + x, 1/32, 0.5 - x, 1/32 + x, 0.5)
-		x = 0.1 * 11/17
-		line2:SetTexCoord(1/32 - x, 0.5, 1/32, 0.5 + x, 1/32, 0.5 - x, 1/32 + x, 0.5)
+		if line1 and line2 then
+			line1:Size(12)
+			line1:Point("BOTTOMRIGHT", -1, 1)
+			line2:Size(8)
+			line2:Point("BOTTOMRIGHT", -1, 1)
+			local x = 0.1 * 14/17
+			line1:SetTexCoord(1/32 - x, 0.5, 1/32, 0.5 + x, 1/32, 0.5 - x, 1/32 + x, 0.5)
+			x = 0.1 * 11/17
+			line2:SetTexCoord(1/32 - x, 0.5, 1/32, 0.5 + x, 1/32, 0.5 - x, 1/32 + x, 0.5)
+		end
 
 		sizer:HookScript("OnMouseUp", function(self)
 			self:GetParent():ClearAllPoints()
