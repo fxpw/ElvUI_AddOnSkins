@@ -12,22 +12,22 @@ local _G = _G
 
 local function HandleSellItemButton(self)
 	-- if not self.IsSkinned then
-		self.IconBorder:Hide()
-		self.IconBorder2 = CreateFrame("Frame", nil, self)
-		self.IconBorder2:SetTemplate()
-		self.IconBorder2:SetBackdropColor(0, 0, 0, 0)
-		self.IconBorder2:SetParent(self)
-		self.IconBorder2:SetOutside(self.Icon)
-		self.IconBorder2:SetBackdropBorderColor(
+	self.IconBorder:Hide()
+	self.IconBorder2 = CreateFrame("Frame", nil, self)
+	self.IconBorder2:SetTemplate()
+	self.IconBorder2:SetBackdropColor(0, 0, 0, 0)
+	self.IconBorder2:SetParent(self)
+	self.IconBorder2:SetOutside(self.Icon)
+	self.IconBorder2:SetBackdropBorderColor(
 		ITEM_QUALITY_COLORS[self.itemInfo.quality].r,
 		ITEM_QUALITY_COLORS[self.itemInfo.quality].g,
 		ITEM_QUALITY_COLORS[self.itemInfo.quality].b,
 		1
-		)
-		self.Icon:SetTexCoord(unpack(E.TexCoords))
-		self.Text:SetDrawLayer("BORDER")
-		self.Text:SetText(self.itemInfo.count)
-		-- self.IsSkinned = true
+	)
+	self.Icon:SetTexCoord(unpack(E.TexCoords))
+	self.Text:SetDrawLayer("BORDER")
+	self.Text:SetText(self.itemInfo.count)
+	-- self.IsSkinned = true
 	-- end
 end
 
@@ -36,7 +36,7 @@ end
 local function HandleEditItemAucFrame()
 	local frames = {
 		"AuctionatorEditItemFrame",
-		}
+	}
 	for _, frame in ipairs(frames) do
 		frame = _G[frame]
 		if frame then
@@ -50,7 +50,7 @@ local function HandleEditItemAucFrame()
 		"AuctionatorEditItemFrameCancel",
 		"AuctionatorEditItemFrameResetAllButton",
 		"AuctionatorEditItemFrameFinished",
-		}
+	}
 	for _, button in ipairs(buttons) do
 		S:HandleButton(_G[button])
 	end
@@ -73,14 +73,14 @@ local function HandleEditItemAucFrame()
 		"AuctionatorEditItemFrameItemLevelRangeMaxBox",
 		"AuctionatorEditItemFrameCraftedLevelRangeMinBox",
 		"AuctionatorEditItemFrameCraftedLevelRangeMaxBox",
-		}
+	}
 	for _, editbox in ipairs(editboxes) do
 		editbox = _G[editbox]
 		if editbox then
 			S:HandleEditBox(editbox)
 		end
 	end
-	local refreshbuttons ={
+	local refreshbuttons = {
 		"AuctionatorEditItemFrameSearchContainerAuctionatorResetButton",
 		"AuctionatorEditItemFrameFilterKeySelectorResetButton",
 		"AuctionatorEditItemFrameLevelRangeResetButton",
@@ -93,18 +93,17 @@ local function HandleEditItemAucFrame()
 		refreshbutton = _G[refreshbutton]
 		if refreshbutton then
 			S:HandleButton(refreshbutton)
-
 		end
 	end
 	local dropdowns = {
 		"AuctionatorEditItemFrameFilterKeySelector",
-		}
-		for _, dropdown in ipairs(dropdowns) do
-			dropdown = _G[dropdown]
-			if dropdown then
-				S:HandleDropDownBox(dropdown)
-			end
+	}
+	for _, dropdown in ipairs(dropdowns) do
+		dropdown = _G[dropdown]
+		if dropdown then
+			S:HandleDropDownBox(dropdown)
 		end
+	end
 	local checkboxes = {
 		"AuctionatorEditItemFrameSearchContainerIsExact"
 	}
@@ -117,10 +116,9 @@ local function HandleEditItemAucFrame()
 
 	AuctionatorEditItemFrameFilterKeySelector:SetWidth(200)
 	AuctionatorEditItemFrameFilterKeySelectorResetButton:ClearAllPoints()
-	AuctionatorEditItemFrameFilterKeySelectorResetButton:SetPoint("TOPLEFT", AuctionatorEditItemFrameFilterKeySelector, "TOPRIGHT", -5, -6)
-
-
-	end
+	AuctionatorEditItemFrameFilterKeySelectorResetButton:SetPoint("TOPLEFT", AuctionatorEditItemFrameFilterKeySelector,
+		"TOPRIGHT", -5, -6)
+end
 
 local function HandleAddItemAucFrame()
 	local frames = {
@@ -163,14 +161,14 @@ local function HandleAddItemAucFrame()
 		"AuctionatorAddItemFrameItemLevelRangeMaxBox",
 		"AuctionatorAddItemFrameCraftedLevelRangeMinBox",
 		"AuctionatorAddItemFrameCraftedLevelRangeMaxBox",
-		}
+	}
 	for _, editbox in ipairs(editboxes) do
 		editbox = _G[editbox]
 		if editbox then
 			S:HandleEditBox(editbox)
 		end
 	end
-	local refreshbuttons ={
+	local refreshbuttons = {
 		"AuctionatorAddItemFrameSearchContainerAuctionatorResetButton",
 		"AuctionatorAddItemFrameFilterKeySelectorResetButton",
 		"AuctionatorAddItemFrameLevelRangeResetButton",
@@ -183,18 +181,17 @@ local function HandleAddItemAucFrame()
 		refreshbutton = _G[refreshbutton]
 		if refreshbutton then
 			S:HandleButton(refreshbutton)
-
 		end
 	end
 	local dropdowns = {
 		"AuctionatorAddItemFrameFilterKeySelector",
-		}
-		for _, dropdown in ipairs(dropdowns) do
-			dropdown = _G[dropdown]
-			if dropdown then
-				S:HandleDropDownBox(dropdown)
-			end
+	}
+	for _, dropdown in ipairs(dropdowns) do
+		dropdown = _G[dropdown]
+		if dropdown then
+			S:HandleDropDownBox(dropdown)
 		end
+	end
 	local checkboxes = {
 		"AuctionatorAddItemFrameSearchContainerIsExact"
 	}
@@ -207,13 +204,12 @@ local function HandleAddItemAucFrame()
 
 	AuctionatorAddItemFrameFilterKeySelector:SetWidth(200)
 	AuctionatorAddItemFrameFilterKeySelectorResetButton:ClearAllPoints()
-	AuctionatorAddItemFrameFilterKeySelectorResetButton:SetPoint("TOPLEFT", AuctionatorAddItemFrameFilterKeySelector, "TOPRIGHT", -5, -6)
-
+	AuctionatorAddItemFrameFilterKeySelectorResetButton:SetPoint("TOPLEFT", AuctionatorAddItemFrameFilterKeySelector,
+		"TOPRIGHT", -5, -6)
 end
 
 
 local function HandleFirstAucTab()
-
 	local buttons = {
 		"AuctionatorShoppingListFrameImport",
 		"AuctionatorShoppingListFrameExport",
@@ -227,35 +223,35 @@ local function HandleFirstAucTab()
 		-- "AuctionatorShoppingListFrameResultsListingHeaderContainerPoolFrameAuctionatorStringColumnHeaderTemplate2",
 		-- "AuctionatorShoppingListFrameResultsListingHeaderContainerPoolFrameAuctionatorStringColumnHeaderTemplate3",
 		-- "AuctionatorShoppingListFrameResultsListingHeaderContainerPoolFrameAuctionatorStringColumnHeaderTemplate4",
-		}
-		for _, button in ipairs(buttons) do
-			if _G[button] then
-				S:HandleButton(_G[button])
-			end
+	}
+	for _, button in ipairs(buttons) do
+		if _G[button] then
+			S:HandleButton(_G[button])
 		end
-		-- if AuctionatorShoppingListFrameResultsListingHeaderContainerPoolFrameAuctionatorStringColumnHeaderTemplate1 then
-		-- 	AuctionatorShoppingListFrameResultsListingHeaderContainerPoolFrameAuctionatorStringColumnHeaderTemplate1:ClearAllPoints()
-		-- 	AuctionatorShoppingListFrameResultsListingHeaderContainerPoolFrameAuctionatorStringColumnHeaderTemplate1:SetPoint("BOTTOMLEFT", 15, 4)
-		-- end
+	end
+	-- if AuctionatorShoppingListFrameResultsListingHeaderContainerPoolFrameAuctionatorStringColumnHeaderTemplate1 then
+	-- 	AuctionatorShoppingListFrameResultsListingHeaderContainerPoolFrameAuctionatorStringColumnHeaderTemplate1:ClearAllPoints()
+	-- 	AuctionatorShoppingListFrameResultsListingHeaderContainerPoolFrameAuctionatorStringColumnHeaderTemplate1:SetPoint("BOTTOMLEFT", 15, 4)
+	-- end
 	local dropdowns = {
 		"AuctionatorShoppingListFrameListDropdown",
-		}
-		for _, dropdown in ipairs(dropdowns) do
-			dropdown = _G[dropdown]
-			if dropdown then
-				S:HandleDropDownBox(dropdown)
-			end
+	}
+	for _, dropdown in ipairs(dropdowns) do
+		dropdown = _G[dropdown]
+		if dropdown then
+			S:HandleDropDownBox(dropdown)
 		end
+	end
 	local scrollbars = {
 		"AuctionatorShoppingListFrameResultsListingScrollFrameScrollBar",
 		"AuctionatorShoppingListFrameScrollListScrollFrameScrollBar",
-		}
-		for _, scrollbar in ipairs(scrollbars) do
-			scrollbar = _G[scrollbar]
-			if scrollbar then
-				S:HandleScrollBar(scrollbar)
-			end
+	}
+	for _, scrollbar in ipairs(scrollbars) do
+		scrollbar = _G[scrollbar]
+		if scrollbar then
+			S:HandleScrollBar(scrollbar)
 		end
+	end
 	local frames = {
 		"AuctionatorShoppingListFrameScrollListScrollFrame",
 		"AuctionatorShoppingListFrameResultsListingScrollFrame",
@@ -264,7 +260,7 @@ local function HandleFirstAucTab()
 		"AuctionatorShoppingListFrameResultsListing",
 		"AuctionatorShoppingListFrameScrollListScrollFrameScrollChild",
 		"AuctionatorShoppingListFrameScrollListInsetFrame",
-		}
+	}
 	for _, frame in ipairs(frames) do
 		frame = _G[frame]
 		if frame then
@@ -272,7 +268,7 @@ local function HandleFirstAucTab()
 			-- frame:CreateBackdrop("Transparent")
 		end
 	end
-		--frames createback
+	--frames createback
 	frames = {
 		-- "AuctionatorShoppingListFrameScrollListScrollFrame",
 		-- "AuctionatorShoppingListFrameResultsListingScrollFrame",
@@ -291,7 +287,6 @@ local function HandleFirstAucTab()
 	end
 	AuctionatorShoppingListFrameCreateList:ClearAllPoints()
 	AuctionatorShoppingListFrameCreateList:SetPoint("LEFT", AuctionatorShoppingListFrameListDropdown, "RIGHT", 10, 2)
-
 end
 
 local function HandleSecAucTab()
@@ -328,7 +323,7 @@ local function HandleSecAucTab()
 		"AuctionatorSellingFramePostingHistoryListingHeaderContainerPoolFrameAuctionatorStringColumnHeaderTemplate3",
 		"AuctionatorSellingFramePostingHistoryListingHeaderContainerPoolFrameAuctionatorStringColumnHeaderTemplate4",
 		"AuctionatorSellingFramePostingHistoryListingHeaderContainerPoolFrameAuctionatorStringColumnHeaderTemplate5",
-		}
+	}
 	for _, button in ipairs(buttons) do
 		button = _G[button]
 		if button then
@@ -341,14 +336,14 @@ local function HandleSecAucTab()
 		"AuctionatorSellingFrameHistoricalPriceListingScrollFrameScrollBar",
 		"AuctionatorSellingFrameBagListingScrollFrameScrollBar",
 	}
-	for _,scrollbar in ipairs(scrollbars) do
+	for _, scrollbar in ipairs(scrollbars) do
 		scrollbar = _G[scrollbar]
-			if scrollbar then
-				scrollbar:StripTextures()
-				S:HandleScrollBar(scrollbar)
-				-- scrollbar:ClearAllPoints()
-				-- scrollbar:SetPoint("TOPLEFT", AuctionatorSellingFrameBagListingScrollFrame, "TOPRIGHT", 60, -16)
-			end
+		if scrollbar then
+			scrollbar:StripTextures()
+			S:HandleScrollBar(scrollbar)
+			-- scrollbar:ClearAllPoints()
+			-- scrollbar:SetPoint("TOPLEFT", AuctionatorSellingFrameBagListingScrollFrame, "TOPRIGHT", 60, -16)
+		end
 	end
 	local frames = {
 		"AuctionatorSellingFramePostingHistoryListingScrollFrame",
@@ -398,7 +393,7 @@ local function HandleSecAucTab()
 		"AuctionatorSellingFrameBagListingScrollFrameScrollBarThumbTexture",
 		"AuctionatorSellingFrameBagListingScrollFrameScrollBarChild",
 	}
-	for _,frame in ipairs(frames3) do
+	for _, frame in ipairs(frames3) do
 		frame = _G[frame]
 		if frame then
 			frame:Hide()
@@ -410,27 +405,27 @@ local function HandleSecAucTab()
 		"AuctionatorSellingFrameSaleItemFramePriceMoneyInputSilverBox",
 		"AuctionatorSellingFrameSaleItemFrameQuantityInputBox"
 	}
-	for _,editbox in ipairs(editboxes) do
+	for _, editbox in ipairs(editboxes) do
 		editbox = _G[editbox]
 		if editbox then
 			S:HandleEditBox(editbox)
 		end
 	end
 	AuctionatorSellingFrameSaleItemFramePriceMoneyInputSilverBoxIcon:ClearAllPoints()
-	AuctionatorSellingFrameSaleItemFramePriceMoneyInputSilverBoxIcon:SetPoint( "RIGHT", AuctionatorSellingFrameSaleItemFramePriceMoneyInputSilverBox, "RIGHT", -13.000000136774, 2)
+	AuctionatorSellingFrameSaleItemFramePriceMoneyInputSilverBoxIcon:SetPoint("RIGHT",
+		AuctionatorSellingFrameSaleItemFramePriceMoneyInputSilverBox, "RIGHT", -13.000000136774, 2)
 
 	local checkbuttons = {
 		"AuctionatorSellingFrameSaleItemFrameDurationDuration12RadioButton",
 		"AuctionatorSellingFrameSaleItemFrameDurationDuration24RadioButton",
 		"AuctionatorSellingFrameSaleItemFrameDurationDuration48RadioButton",
 	}
-	for _,checkbutton in ipairs(checkbuttons) do
+	for _, checkbutton in ipairs(checkbuttons) do
 		checkbutton = _G[checkbutton]
 		if checkbutton then
 			S:HandleCheckBox(checkbutton)
 		end
 	end
-
 end
 
 
@@ -438,7 +433,7 @@ local function HandleThirdAucTab()
 	local buttons = {
 		"AuctionatorCancellingFrameScanStartScanButton",
 		"AuctionatorCancelUndercutButton",
-		-- "AuctionatorCancellingFrameResultsListingHeaderContainerPoolFrameAuctionatorStringColumnHeaderTemplate1",
+		"AuctionatorCancelAllButton",
 		-- "AuctionatorCancellingFrameResultsListingHeaderContainerPoolFrameAuctionatorStringColumnHeaderTemplate2",
 		-- "AuctionatorCancellingFrameResultsListingHeaderContainerPoolFrameAuctionatorStringColumnHeaderTemplate3",
 		-- "AuctionatorCancellingFrameResultsListingHeaderContainerPoolFrameAuctionatorStringColumnHeaderTemplate4",
@@ -446,7 +441,7 @@ local function HandleThirdAucTab()
 		-- "AuctionatorCancellingFrameResultsListingHeaderContainerPoolFrameAuctionatorStringColumnHeaderTemplate6",
 		-- "AuctionatorCancellingFrameResultsListingHeaderContainerPoolFrameAuctionatorStringColumnHeaderTemplate7",
 	}
-	for _,button in ipairs(buttons) do
+	for _, button in ipairs(buttons) do
 		button = _G[button]
 		if button then
 			S:HandleButton(button)
@@ -456,7 +451,7 @@ local function HandleThirdAucTab()
 	local editboxes = {
 		"AuctionatorCancellingFrameSearchFilter",
 	}
-	for _,editbox in ipairs(editboxes) do
+	for _, editbox in ipairs(editboxes) do
 		editbox = _G[editbox]
 		if editbox then
 			S:HandleEditBox(editbox)
@@ -466,7 +461,7 @@ local function HandleThirdAucTab()
 		"AuctionatorCancellingFrameHistoricalPriceInset",
 		"AuctionatorCancellingFrameHistoricalPriceInsetNineSlice",
 	}
-	for _,frame in ipairs(frames1) do
+	for _, frame in ipairs(frames1) do
 		frame = _G[frame]
 		if frame then
 			frame:StripTextures()
@@ -480,7 +475,7 @@ local function HandleThirdAucTab()
 		"AuctionatorCancellingFrameResultsListingHeaderContainer",
 		"AuctionatorCancellingFrameResultsListing",
 	}
-	for _,frame in ipairs(frames2) do
+	for _, frame in ipairs(frames2) do
 		frame = _G[frame]
 		if frame then
 			frame:StripTextures()
@@ -493,7 +488,7 @@ local function HandleThirdAucTab()
 		-- "AuctionatorCancellingFrameResultsListingScrollFrame",
 		-- "AuctionatorCancellingFrameResultsListingHeaderContainer",
 	}
-	for _,scrollbar in ipairs(scrollbars) do
+	for _, scrollbar in ipairs(scrollbars) do
 		scrollbar = _G[scrollbar]
 		if scrollbar then
 			S:HandleScrollBar(scrollbar)
@@ -507,7 +502,7 @@ local function HandleFourAucTab()
 		"AuctionatorConfigFrameOptionsButton",
 		"AuctionatorConfigFrameScanButton",
 	}
-	for _,button in ipairs(buttons) do
+	for _, button in ipairs(buttons) do
 		button = _G[button]
 		if button then
 			S:HandleButton(button)
@@ -518,7 +513,7 @@ local function HandleFourAucTab()
 		"AuctionatorConfigFrame",
 		"AuctionatorConfigFrameNineSlice",
 	}
-	for _,frame in ipairs(frames) do
+	for _, frame in ipairs(frames) do
 		frame = _G[frame]
 		if frame then
 			frame:StripTextures()
@@ -530,7 +525,7 @@ local function HandleFourAucTab()
 		"AuctionatorConfigFrameBugReportLinkInputBox",
 		"AuctionatorConfigFrameTechnicalRoadmapInputBox",
 	}
-	for _,editbox in ipairs(editboxes) do
+	for _, editbox in ipairs(editboxes) do
 		editbox = _G[editbox]
 		if editbox then
 			S:HandleEditBox(editbox)
@@ -543,12 +538,39 @@ end
 S:AddCallbackForAddon("Auctionator", "Auctionator", function()
 	if not E.private.addOnSkins.Auctionator then return end
 
-	hooksecurefunc(AuctionatorTabContainerMixin,"OnLoad",function(self,...)
-
-		S:HandleTab(AuctionatorTabs_ShoppingLists)
-		S:HandleTab(AuctionatorTabs_Selling)
-		S:HandleTab(AuctionatorTabs_Cancelling)
-		S:HandleTab(AuctionatorTabs_Auctionator)
+	hooksecurefunc(AuctionatorTabContainerMixin, "OnLoad", function(self, ...)
+		local tab = AuctionatorTabs_ShoppingLists
+		if (tab) then
+			tab.HighlightLeft:StripTextures()
+			tab.HighlightMiddle:StripTextures()
+			tab.HighlightRight:StripTextures()
+			S:HandleTab(tab)
+		end
+		local tab = AuctionatorTabs_Selling
+		if (tab) then
+			tab.HighlightLeft:StripTextures()
+			tab.HighlightMiddle:StripTextures()
+			tab.HighlightRight:StripTextures()
+			S:HandleTab(tab)
+		end
+		local tab = AuctionatorTabs_Cancelling
+		if (tab) then
+			tab.HighlightLeft:StripTextures()
+			tab.HighlightMiddle:StripTextures()
+			tab.HighlightRight:StripTextures()
+			S:HandleTab(tab)
+		end
+		local tab = AuctionatorTabs_Auctionator
+		if (tab) then
+			tab.HighlightLeft:StripTextures()
+			tab.HighlightMiddle:StripTextures()
+			tab.HighlightRight:StripTextures()
+			S:HandleTab(tab)
+		end
+		-- S:HandleTab(AuctionatorTabs_ShoppingLists)
+		-- S:HandleTab(AuctionatorTabs_Selling)
+		-- S:HandleTab(AuctionatorTabs_Cancelling)
+		-- S:HandleTab(AuctionatorTabs_Auctionator)
 
 		HandleFirstAucTab()
 		HandleAddItemAucFrame()
@@ -558,24 +580,22 @@ S:AddCallbackForAddon("Auctionator", "Auctionator", function()
 		HandleFourAucTab()
 	end)
 	-- AuctionatorTabMixin:Initialize(
-		-- AuctionatorResultsListingMixin:UpdateTable()
-	hooksecurefunc(AuctionatorStringColumnHeaderTemplateMixin,"Init",function(self)
+	-- AuctionatorResultsListingMixin:UpdateTable()
+	hooksecurefunc(AuctionatorStringColumnHeaderTemplateMixin, "Init", function(self)
 		S:HandleButton(self)
 		if self:GetText() == "Количество" then
 			self:SetText("Кол-во")
 		end
 	end)
 
-	hooksecurefunc(Auctionator.ReagentSearch,"InitializeSearchButton",function()
+	hooksecurefunc(Auctionator.ReagentSearch, "InitializeSearchButton", function()
 		S:HandleButton(AuctionatorTradeSkillSearch)
 	end)
 
 
-	hooksecurefunc(AuctionatorBagClassListingMixin,"UpdateForEmpty",function(self)
+	hooksecurefunc(AuctionatorBagClassListingMixin, "UpdateForEmpty", function(self)
 		for _, button in ipairs(self.buttons) do
 			HandleSellItemButton(button)
 		end
 	end)
 end)
-
-
