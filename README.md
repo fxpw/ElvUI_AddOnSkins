@@ -1,5 +1,5 @@
 [![Game Version](https://img.shields.io/badge/wow-3.3.5-blue.svg)](https://github.com/ElvUI-WotLK)
-[![Discord](https://discordapp.com/api/guilds/259362419372064778/widget.png?style=shield)](https://discord.gg/UXSc7nt)
+[![Discord](https://discordapp.com/api/guilds/259362419372064778/widget.png?style=shield)](https://discord.gg/addony-dlia-sirus-su-914079030125420565)
 
 # ElvUI_AddOnSkins - Sirus Edition(335a+)
 
