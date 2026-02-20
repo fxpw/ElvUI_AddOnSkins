@@ -196,6 +196,24 @@ S:AddCallbackForAddon("InnK-Auc", "InnK-Auc", function()
         end
     end)
 
+	if _G["InnKAucQuickMailFrame"] then
+		local quickMail = _G["InnKAucQuickMailFrame"]
+		quickMail:StripTextures()
+		quickMail:CreateBackdrop("Transparent")
+
+		if _G["InnKAucQuickMailRecipient"] then
+			S:HandleEditBox(_G["InnKAucQuickMailRecipient"])
+		end
+		
+		if _G["InnKAucQuickMailItems"] then
+			S:HandleEditBox(_G["InnKAucQuickMailItems"])
+		end
+		
+		if _G["InnKAucQuickMailButton"] then
+			S:HandleButton(_G["InnKAucQuickMailButton"])
+		end
+	end
+
 	if InnKAucTabMixin then
 		hooksecurefunc(InnKAucTabMixin, "CreateContent", function(self)
 			if self.SettingsButton then
