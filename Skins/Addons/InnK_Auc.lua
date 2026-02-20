@@ -204,11 +204,11 @@ S:AddCallbackForAddon("InnK-Auc", "InnK-Auc", function()
 		if _G["InnKAucQuickMailRecipient"] then
 			S:HandleEditBox(_G["InnKAucQuickMailRecipient"])
 		end
-		
+
 		if _G["InnKAucQuickMailItems"] then
 			S:HandleEditBox(_G["InnKAucQuickMailItems"])
 		end
-		
+
 		if _G["InnKAucQuickMailButton"] then
 			S:HandleButton(_G["InnKAucQuickMailButton"])
 		end
