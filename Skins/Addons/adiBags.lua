@@ -43,29 +43,108 @@ S:AddCallbackForAddon("AdiBags", "AdiBags", function()
 	local AdiBags = LibStub("AceAddon-3.0"):GetAddon("AdiBags", true)
 	if not AdiBags then return end
 
+	local skinnedFrames = {}
+	setmetatable(skinnedFrames, {__mode = "k"})
+
+	local function FixBorder(frame)
+		if not frame or not frame.GetBackdrop then return end
+		local scale = AdiBags.db.profile and AdiBags.db.profile.scale or 1
+		local mult = (E.mult / scale)
+
+		if scale < 1 then
+			mult = mult + (mult * 0.05)
+		end
+
+		local target = frame.backdrop or frame
+		local backdrop = target:GetBackdrop()
+		if backdrop then
+			local r, g, b, a = target:GetBackdropColor()
+			local br, bg, bb, ba = target:GetBackdropBorderColor()
+			backdrop.edgeSize = mult
+			target:SetBackdrop(backdrop)
+			target:SetBackdropColor(r or 0, g or 0, b or 0, a or 0)
+			target:SetBackdropBorderColor(br or 0, bg or 0, bb or 0, ba or 0)
+		end
+
+		if target.iborder then
+			target.iborder:SetInside(target, mult, mult)
+			local ibackdrop = target.iborder:GetBackdrop()
+			if ibackdrop then
+				ibackdrop.edgeSize = mult
+				ibackdrop.insets.left = -mult
+				ibackdrop.insets.right = -mult
+				ibackdrop.insets.top = -mult
+				ibackdrop.insets.bottom = -mult
+				target.iborder:SetBackdrop(ibackdrop)
+				target.iborder:SetBackdropBorderColor(0, 0, 0, 1)
+			end
+		end
+
+		if target.oborder then
+			target.oborder:SetOutside(target, mult, mult)
+			local obackdrop = target.oborder:GetBackdrop()
+			if obackdrop then
+				obackdrop.edgeSize = mult
+				obackdrop.insets.left = mult
+				obackdrop.insets.right = mult
+				obackdrop.insets.top = mult
+				obackdrop.insets.bottom = mult
+				target.oborder:SetBackdrop(obackdrop)
+				target.oborder:SetBackdropBorderColor(0, 0, 0, 1)
+			end
+		end
+
+		if frame.sectionHighlights then
+			for _, tex in ipairs(frame.sectionHighlights) do
+				if tex.isHoriz then
+					tex:SetHeight(mult)
+				else
+					tex:SetWidth(mult)
+				end
+			end
+		end
+	end
+
+	local function RegisterFrame(frame)
+		if not frame then return end
+		skinnedFrames[frame] = true
+		FixBorder(frame)
+	end
+
 	hooksecurefunc(AdiBags, "ResetBagPositions", function(self)
 		self.db.profile.scale = 1
 		self:LayoutBags()
 	end)
 
+	hooksecurefunc(AdiBags, "LayoutBags", function()
+		for frame in pairs(skinnedFrames) do
+			FixBorder(frame)
+		end
+	end)
+
 	local function SkinContainer(frame)
 		frame:SetTemplate("Transparent")
+		RegisterFrame(frame)
+		
 		S:HandleCloseButton(frame.CloseButton)
 
 		local bagSlots = frame.HeaderLeftRegion.widgets[1].widget
 		bagSlots:SetTemplate()
 		bagSlots:StyleButton(nil, true)
+		RegisterFrame(bagSlots)
 
 		local bagSlotsTex = bagSlots:GetNormalTexture()
 		bagSlotsTex:SetInside()
 		bagSlotsTex:SetTexCoord(unpack(E.TexCoords))
 
 		frame.BagSlotPanel:SetTemplate("Transparent")
+		RegisterFrame(frame.BagSlotPanel)
 
 		for _, bag in ipairs(frame.BagSlotPanel.buttons) do
 			bag:StripTextures()
 			bag:SetTemplate()
 			bag:StyleButton()
+			RegisterFrame(bag)
 
 			local icon = _G[bag:GetName().."IconTexture"]
 			icon:SetInside()
@@ -104,9 +183,11 @@ S:AddCallbackForAddon("AdiBags", "AdiBags", function()
 						widget:GetPushedTexture():SetTexCoord(unpack(E.TexCoords))
 					end
 				end
+				RegisterFrame(widget)
 			elseif widget:IsObjectType("EditBox") then
 				widget:DisableDrawLayer("BACKGROUND")
 				S:HandleEditBox(widget)
+				RegisterFrame(widget)
 
 				if widget.clearButton then
 					widget.clearButton:StripTextures()
@@ -217,12 +298,17 @@ S:AddCallbackForAddon("AdiBags", "AdiBags", function()
 			top:SetPoint("TOPLEFT")
 			top:SetPoint("TOPRIGHT")
 			top:SetHeight(1)
+			top.isHoriz = true
 
 			local bottom = header:CreateTexture(nil, "HIGHLIGHT")
 			bottom:SetTexture(r, g, b, 1)
 			bottom:SetPoint("BOTTOMLEFT")
 			bottom:SetPoint("BOTTOMRIGHT")
 			bottom:SetHeight(1)
+			bottom.isHoriz = true
+
+			header.sectionHighlights = {left, right, top, bottom}
+			RegisterFrame(header)
 		end)
 	end
 
@@ -247,6 +333,8 @@ S:AddCallbackForAddon("AdiBags", "AdiBags", function()
 		hooksecurefunc(self.IconQuestTexture, "Hide", updateBorderOnHide)
 
 		E:RegisterCooldown(self.Cooldown)
+
+		RegisterFrame(self)
 	end)
 
 	hooksecurefunc(ItemButtonClass.prototype, "Update", function(self)
