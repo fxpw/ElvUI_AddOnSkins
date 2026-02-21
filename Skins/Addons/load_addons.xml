@@ -105,6 +105,5 @@
 	<Script file="ItemRack.lua"/>
 	<Script file="EavesDrop.lua"/>
 	<Script file="CharacterNotes.lua"/>
-	<Script file="InnK_Auc.lua"/>
 	<Script file="Immersion.lua"/>
 </Ui>
