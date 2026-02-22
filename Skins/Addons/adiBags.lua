@@ -55,6 +55,9 @@ S:AddCallbackForAddon("AdiBags", "AdiBags", function()
 			mult = mult + (mult * 0.05)
 		end
 
+		if frame.SkinMult == mult then return end
+		frame.SkinMult = mult
+
 		local target = frame.backdrop or frame
 		local backdrop = target:GetBackdrop()
 		if backdrop then
@@ -469,11 +472,16 @@ S:AddCallbackForAddon("AdiBags", "AdiBags", function()
 			local validBag = self.bag
 			if validBag then
 				local itemLink = GetContainerItemLink(self.bag, self.slot)
-				local hasKey = false
-				for key in pairs(D.Keys) do
-					if GetItemCount(key) > 0 then hasKey = key; break end
+				
+				if not D._hasKeyTime or GetTime() > D._hasKeyTime then
+					D._hasKeyCache = false
+					for key in pairs(D.Keys) do
+						if GetItemCount(key) > 0 then D._hasKeyCache = key; break end
+					end
+					D._hasKeyTime = GetTime() + 0.5
 				end
-				if itemLink and D:CanProcessItem(itemLink, hasKey) then
+
+				if itemLink and D:CanProcessItem(itemLink, D._hasKeyCache) then
 					self:SetAlpha(1)
 				else
 					self:SetAlpha(0.3)
