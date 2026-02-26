@@ -50,6 +50,7 @@ S:AddCallbackForAddon("AtlasLoot", "AtlasLoot", function()
 	S:HandleButton(AtlasLootDefaultFrame_Preset7)
 	S:HandleButton(AtlasLootDefaultFrame_Preset8)
 	S:HandleButton(AtlasLootDefaultFrame_Preset9)
+	S:HandleButton(AtlasLootDefaultFrame_Preset10)
 
 	S:HandleButton(AtlasLootDefaultFrameWishListButton)
 	S:HandleEditBox(AtlasLootDefaultFrameSearchBox)
