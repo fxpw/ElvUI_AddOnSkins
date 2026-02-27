@@ -55,6 +55,9 @@ S:AddCallbackForAddon("AdiBags", "AdiBags", function()
 			mult = mult + (mult * 0.05)
 		end
 
+		if frame.SkinMult == mult then return end
+		frame.SkinMult = mult
+
 		local target = frame.backdrop or frame
 		local backdrop = target:GetBackdrop()
 		if backdrop then
@@ -122,11 +125,129 @@ S:AddCallbackForAddon("AdiBags", "AdiBags", function()
 		end
 	end)
 
+	local B = E:GetModule("Bags", true)
+	if B then
+		hooksecurefunc(B, "StopStacking", function(self, message, noUpdate)
+			if not noUpdate then
+				E:Delay(0.6, function()
+					if AdiBags then
+						AdiBags:SendMessage("AdiBags_FiltersChanged")
+					end
+				end)
+			end
+		end)
+	end
+
 	local function SkinContainer(frame)
 		frame:SetTemplate("Transparent")
 		RegisterFrame(frame)
 		
 		S:HandleCloseButton(frame.CloseButton)
+
+		local B = E:GetModule("Bags")
+
+		if tonumber(E.version) >= 7.99 then
+			frame.deconstructButton = CreateFrame("Button", nil, frame)
+			frame.deconstructButton:Size(16 + E.Border)
+			frame.deconstructButton:SetTemplate()
+			frame:AddHeaderWidget(frame.deconstructButton, -20, 16 + E.Border, 0)
+			frame.deconstructButton:SetNormalTexture("Interface\\ICONS\\INV_Rod_Enchantedcobalt")
+			frame.deconstructButton:GetNormalTexture():SetTexCoord(unpack(E.TexCoords))
+			frame.deconstructButton:GetNormalTexture():SetInside()
+			frame.deconstructButton:SetPushedTexture("Interface\\ICONS\\INV_Rod_Enchantedcobalt")
+			frame.deconstructButton:GetPushedTexture():SetTexCoord(unpack(E.TexCoords))
+			frame.deconstructButton:GetPushedTexture():SetInside()
+			frame.deconstructButton:StyleButton(nil, true)
+			frame.deconstructButton.ttText = L["Deconstruct Mode"]
+			frame.deconstructButton:SetScript("OnEnter", B.Tooltip_Show)
+			frame.deconstructButton:SetScript("OnLeave", function() GameTooltip:Hide() end)
+			frame.deconstructButton:SetScript("OnClick", function(self)
+				local D = B:GetModule("Deconstruct")
+				if not D then return end
+				
+				if not D.DeconstructButton then
+					D.DeconstructButton = self
+				end
+
+				if not D.DeconstructionReal then
+					D:UpdateProfessions()
+					D:ConstructRealDecButton()
+					GameTooltip:HookScript('OnShow', function() D:DeconstructParser() end)
+					GameTooltip:HookScript('OnUpdate', function() D:DeconstructParser() end)
+
+					D:RegisterEvent('SKILL_LINES_CHANGED')
+					D:RegisterEvent('SPELLS_CHANGED')
+					D:RegisterEvent('LEARNED_SPELL_IN_TAB')
+				end
+
+				if D.ToggleMode then
+					D:ToggleMode()
+					AdiBags:SendMessage("AdiBags_UpdateAllButtons")
+				end
+			end)
+			RegisterFrame(frame.deconstructButton)
+
+			frame:HookScript("OnHide", function()
+				local D = B:GetModule("Deconstruct")
+				if D and D.DeconstructMode then
+					D.DeconstructMode = false
+					if D.DeconstructButton then
+						local normalTex = D.DeconstructButton:GetNormalTexture()
+						if normalTex then normalTex:SetTexture([[Interface\ICONS\INV_Rod_Enchantedcobalt]]) end
+						ActionButton_HideOverlayGlow(D.DeconstructButton)
+					end
+					if D.DeconstructionReal then D.DeconstructionReal:OnLeave() end
+					AdiBags:SendMessage("AdiBags_UpdateAllButtons")
+					
+					-- Keep original ElvUI behavior as well just in case
+					if B.BagFrame then D:UpdateBagSlots(B.BagFrame, false) end
+					if B.BankFrame then D:UpdateBagSlots(B.BankFrame, false) end
+				end
+			end)
+		end
+
+		frame.sortButton = CreateFrame("Button", nil, frame)
+		frame.sortButton:Size(16 + E.Border)
+		frame.sortButton:SetTemplate()
+		frame:AddHeaderWidget(frame.sortButton, -21, 16 + E.Border, 0)
+		frame.sortButton:SetNormalTexture(E.Media.Textures.Broom)
+		frame.sortButton:GetNormalTexture():SetTexCoord(unpack(E.TexCoords))
+		frame.sortButton:GetNormalTexture():SetInside()
+		frame.sortButton:SetPushedTexture(E.Media.Textures.Broom)
+		frame.sortButton:GetPushedTexture():SetTexCoord(unpack(E.TexCoords))
+		frame.sortButton:GetPushedTexture():SetInside()
+		frame.sortButton:SetDisabledTexture(E.Media.Textures.Broom)
+		frame.sortButton:GetDisabledTexture():SetTexCoord(unpack(E.TexCoords))
+		frame.sortButton:GetDisabledTexture():SetInside()
+		frame.sortButton:GetDisabledTexture():SetDesaturated(true)
+		frame.sortButton:StyleButton(nil, true)
+		frame.sortButton.ttText = L["Sort Bags"]
+		frame.sortButton:SetScript("OnEnter", B.Tooltip_Show)
+		frame.sortButton:SetScript("OnLeave", function() GameTooltip:Hide() end)
+		frame.sortButton:SetScript("OnClick", function()
+			B:CommandDecorator(B.SortBags, "bags")()
+		end)
+		RegisterFrame(frame.sortButton)
+
+		frame.vendorGraysButton = CreateFrame("Button", nil, frame)
+		frame.vendorGraysButton:Size(16 + E.Border)
+		frame.vendorGraysButton:SetTemplate()
+		frame:AddHeaderWidget(frame.vendorGraysButton, -22, 16 + E.Border, 0)
+		frame.vendorGraysButton:SetNormalTexture("Interface\\ICONS\\INV_Misc_Coin_01")
+		frame.vendorGraysButton:GetNormalTexture():SetTexCoord(unpack(E.TexCoords))
+		frame.vendorGraysButton:GetNormalTexture():SetInside()
+		frame.vendorGraysButton:SetPushedTexture("Interface\\ICONS\\INV_Misc_Coin_01")
+		frame.vendorGraysButton:GetPushedTexture():SetTexCoord(unpack(E.TexCoords))
+		frame.vendorGraysButton:GetPushedTexture():SetInside()
+		frame.vendorGraysButton:StyleButton(nil, true)
+		frame.vendorGraysButton.ttText = L["Vendor / Delete Grays"]
+		frame.vendorGraysButton:SetScript("OnEnter", B.Tooltip_Show)
+		frame.vendorGraysButton:SetScript("OnLeave", function() GameTooltip:Hide() end)
+		frame.vendorGraysButton:SetScript("OnClick", function()
+			if not B.SellFrame then B:CreateSellFrame() end
+			B:VendorGrayCheck()
+		end)
+		RegisterFrame(frame.vendorGraysButton)
 
 		local bagSlots = frame.HeaderLeftRegion.widgets[1].widget
 		bagSlots:SetTemplate()
@@ -342,6 +463,41 @@ S:AddCallbackForAddon("AdiBags", "AdiBags", function()
 
 		if not self.texture then
 			self.IconTexture:SetTexture(nil)
+		end
+
+		local B = E:GetModule("Bags", true)
+		local D = B and B:GetModule("Deconstruct", true)
+
+		if D and D.DeconstructMode then
+			local validBag = self.bag
+			if validBag then
+				local itemLink = GetContainerItemLink(self.bag, self.slot)
+				
+				if not D._hasKeyTime or GetTime() > D._hasKeyTime then
+					D._hasKeyCache = false
+					for key in pairs(D.Keys) do
+						if GetItemCount(key) > 0 then D._hasKeyCache = key; break end
+					end
+					D._hasKeyTime = GetTime() + 0.5
+				end
+
+				if itemLink and D:CanProcessItem(itemLink, D._hasKeyCache) then
+					self:SetAlpha(1)
+				else
+					self:SetAlpha(0.3)
+				end
+			end
+		else
+			if self.hasItem then
+				local _, _, itemQuality = GetItemInfo(self.itemId)
+				if itemQuality == ITEM_QUALITY_POOR and AdiBags.db.profile.dimJunk then
+					self:SetAlpha(0.5)
+				else
+					self:SetAlpha(1)
+				end
+			else
+				self:SetAlpha(1)
+			end
 		end
 	end)
 
