@@ -107,4 +107,5 @@
 	<Script file="CharacterNotes.lua"/>
 	<Script file="InnK_Auc.lua"/>
 	<Script file="Immersion.lua"/>
+	<Script file="bugsworth.lua"/>
 </Ui>
