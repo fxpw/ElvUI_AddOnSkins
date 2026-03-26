@@ -18,14 +18,6 @@ S:AddCallbackForAddon("!Bugsworth", "Bugsworth", function()
 		frame:SetTemplate("Transparent")
 
 		for _, child in ipairs({frame:GetChildren()}) do
-			if child:IsObjectType("Button") and child.GetNormalTexture and child:GetNormalTexture() then
-				local tex = child:GetNormalTexture():GetTexture()
-				if tex and tostring(tex):find("UI%-Panel%-MinimizeButton") then
-					S:HandleCloseButton(child)
-				end
-			end
-		end
-		for _, child in ipairs({frame:GetChildren()}) do
 			if child:IsObjectType("Button") and not child:GetText() and child:GetWidth() < 40 then
 				local point = child:GetPoint()
 				if point == "TOPRIGHT" then
@@ -35,33 +27,25 @@ S:AddCallbackForAddon("!Bugsworth", "Bugsworth", function()
 			end
 		end
 
-		local navPanel, detailPanel
 		for _, child in ipairs({frame:GetChildren()}) do
 			if child:IsObjectType("Frame") and not child:GetName() and child:GetWidth() < 200 then
 				if child.GetBackdrop and child:GetBackdrop() then
-					navPanel = child
+					child:StripTextures()
+					child:SetTemplate("Transparent")
+					break
 				end
 			end
 		end
 
-		if navPanel then
-			navPanel:StripTextures()
-			navPanel:SetTemplate("Transparent")
+		if _G.BugsworthSearchBox then
+			S:HandleEditBox(_G.BugsworthSearchBox)
+			_G.BugsworthSearchBox:Height(18)
 		end
 
-		local searchBox = _G.BugsworthSearchBox
-		if searchBox then
-			S:HandleEditBox(searchBox)
-			searchBox:Height(18)
-		end
-
-		local navScroll = _G.BugsworthNavScroll
-		if navScroll then
+		if _G.BugsworthNavScrollScrollBar then
 			S:HandleScrollBar(_G.BugsworthNavScrollScrollBar)
 		end
-
-		local detailScroll = _G.BugsworthDetailScroll
-		if detailScroll then
+		if _G.BugsworthDetailScrollScrollBar then
 			S:HandleScrollBar(_G.BugsworthDetailScrollScrollBar)
 		end
 
@@ -70,27 +54,85 @@ S:AddCallbackForAddon("!Bugsworth", "Bugsworth", function()
 		S:HandleButton(_G.BugsworthClearButton)
 		S:HandleButton(_G.BugsworthCopyButton)
 
-		local tabAll = _G.BugsworthTabAll
-		local tabSession = _G.BugsworthTabSession
-		local tabPrev = _G.BugsworthTabPrev
-
-		if tabAll then
-			tabAll:Point("TOPLEFT", frame, "BOTTOMLEFT", 0, 2)
-			S:HandleTab(tabAll)
+		if _G.BugsworthTabAll then
+			_G.BugsworthTabAll:Point("TOPLEFT", frame, "BOTTOMLEFT", 0, 2)
+			S:HandleTab(_G.BugsworthTabAll)
 		end
-		if tabSession then S:HandleTab(tabSession) end
-		if tabPrev then S:HandleTab(tabPrev) end
+		if _G.BugsworthTabSession then S:HandleTab(_G.BugsworthTabSession) end
+		if _G.BugsworthTabPrev then S:HandleTab(_G.BugsworthTabPrev) end
 
 		frame.isSkinned = true
 		S:Unhook(BC, "OpenViewer")
 	end)
 
+	local configPanel
+	for _, cat in ipairs(INTERFACEOPTIONS_ADDONCATEGORIES) do
+		if cat.name == "Bugsworth" then
+			configPanel = cat
+			break
+		end
+	end
+
+	if configPanel then
+		S:SecureHookScript(configPanel, "OnShow", function(panel)
+			if panel.isSkinned then return end
+
+			local checkboxNames = {
+				"BugsworthCheckAuto-openonerror",
+				"BugsworthCheckChatnotification",
+				"BugsworthCheckMuteerrorsound",
+				"BugsworthCheckFilteraddonactionerrors",
+				"BugsworthCheckThrottleexcessiveerrors",
+				"BugsworthCheckSuppressdefaulterrorpopup",
+				"BugsworthCheckMulti-levellocals",
+				"BugsworthCheckCaptureaddonmemory",
+			}
+
+			for _, name in ipairs(checkboxNames) do
+				local cb = _G[name]
+				if cb then S:HandleCheckBox(cb) end
+			end
+
+			for _, child in ipairs({panel:GetChildren()}) do
+				if child:IsObjectType("Slider") then
+					S:HandleSliderFrame(child)
+				elseif child:IsObjectType("Button") and child:GetText() == "Wipe All Errors" then
+					S:HandleButton(child)
+				end
+			end
+
+			if panel.rebuildIgnoreList then
+				local origRebuild = panel.rebuildIgnoreList
+				panel.rebuildIgnoreList = function(...)
+					origRebuild(...)
+					for _, child in ipairs({panel:GetChildren()}) do
+						if child:IsObjectType("Frame") and not child:GetName() and child:GetHeight() == 120 then
+							for _, row in ipairs({child:GetChildren()}) do
+								if row:IsShown() then
+									for _, btn in ipairs({row:GetChildren()}) do
+										if btn:IsObjectType("Button") and not btn.isSkinned then
+											S:HandleButton(btn)
+											btn.isSkinned = true
+										end
+									end
+								end
+							end
+							break
+						end
+					end
+				end
+				panel.rebuildIgnoreList()
+			end
+
+			panel.isSkinned = true
+		end)
+	end
+
 	local mmButton = _G.BugsworthMinimapButton
 	if mmButton then
 		mmButton:SetHighlightTexture(nil)
 
-		local regions = {mmButton:GetRegions()}
-		for _, region in ipairs(regions) do
+		for _, region in ipairs({mmButton:GetRegions()}) do
 			if region:IsObjectType("Texture") then
 				local tex = region:GetTexture()
 				if tex and tostring(tex):find("MiniMap%-TrackingBorder") then
