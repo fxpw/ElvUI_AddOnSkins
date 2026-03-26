@@ -140,6 +140,48 @@ S:AddCallbackForAddon("!Bugsworth", "Bugsworth", function()
 		end)
 	end
 
+	S:SecureHook(BC, "OpenTaintViewer", function()
+		local tf = _G.BugsworthTaintFrame
+		if not tf or tf.isSkinned then return end
+
+		tf:StripTextures()
+		tf:SetTemplate("Transparent")
+
+		for _, child in ipairs({tf:GetChildren()}) do
+			if child:IsObjectType("Button") and not child:GetText() and child:GetWidth() < 40 then
+				local point = child:GetPoint()
+				if point == "TOPRIGHT" then
+					S:HandleCloseButton(child, tf)
+					break
+				end
+			end
+		end
+
+		for _, child in ipairs({tf:GetChildren()}) do
+			if child:IsObjectType("Frame") and not child:GetName() and child:GetWidth() < 220 then
+				if child.GetBackdrop and child:GetBackdrop() then
+					child:StripTextures()
+					child:SetTemplate("Transparent")
+					break
+				end
+			end
+		end
+
+		if _G.BugsworthTaintListScrollScrollBar then
+			S:HandleScrollBar(_G.BugsworthTaintListScrollScrollBar)
+		end
+		if _G.BugsworthTaintDetailScrollScrollBar then
+			S:HandleScrollBar(_G.BugsworthTaintDetailScrollScrollBar)
+		end
+
+		S:HandleButton(_G.BugsworthTaintSessionBtn)
+		S:HandleButton(_G.BugsworthTaintClearBtn)
+		S:HandleButton(_G.BugsworthTaintCopyBtn)
+
+		tf.isSkinned = true
+		S:Unhook(BC, "OpenTaintViewer")
+	end)
+
 	local mmButton = _G.BugsworthMinimapButton
 	if mmButton then
 		mmButton:SetHighlightTexture(nil)
