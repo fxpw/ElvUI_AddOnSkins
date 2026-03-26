@@ -54,12 +54,24 @@ S:AddCallbackForAddon("!Bugsworth", "Bugsworth", function()
 		S:HandleButton(_G.BugsworthClearButton)
 		S:HandleButton(_G.BugsworthCopyButton)
 
+		local function skinTab(tab)
+			if not tab then return end
+			S:HandleTab(tab)
+			local name = tab:GetName()
+			if name then
+				for _, suffix in ipairs({"HighlightLeft", "HighlightMiddle", "HighlightRight", "HighlightTexture"}) do
+					local tex = _G[name .. suffix]
+					if tex then tex:SetTexture(nil) tex:Hide() end
+				end
+			end
+		end
+
 		if _G.BugsworthTabAll then
 			_G.BugsworthTabAll:Point("TOPLEFT", frame, "BOTTOMLEFT", 0, 2)
-			S:HandleTab(_G.BugsworthTabAll)
 		end
-		if _G.BugsworthTabSession then S:HandleTab(_G.BugsworthTabSession) end
-		if _G.BugsworthTabPrev then S:HandleTab(_G.BugsworthTabPrev) end
+		skinTab(_G.BugsworthTabAll)
+		skinTab(_G.BugsworthTabSession)
+		skinTab(_G.BugsworthTabPrev)
 
 		frame.isSkinned = true
 		S:Unhook(BC, "OpenViewer")
@@ -78,14 +90,14 @@ S:AddCallbackForAddon("!Bugsworth", "Bugsworth", function()
 			if panel.isSkinned then return end
 
 			local checkboxNames = {
-				"BugsworthCheckAuto-openonerror",
-				"BugsworthCheckChatnotification",
-				"BugsworthCheckMuteerrorsound",
-				"BugsworthCheckFilteraddonactionerrors",
-				"BugsworthCheckThrottleexcessiveerrors",
-				"BugsworthCheckSuppressdefaulterrorpopup",
-				"BugsworthCheckMulti-levellocals",
-				"BugsworthCheckCaptureaddonmemory",
+				"BugsworthCheckАвто-открытиеприошибке",
+				"BugsworthCheckУведомлениевчат",
+				"BugsworthCheckОтключитьзвукошибки",
+				"BugsworthCheckФильтрошибокдействийаддонов",
+				"BugsworthCheckОграничениечастыхошибок",
+				"BugsworthCheckСкрытьстандартноеокноошибок",
+				"BugsworthCheckМногоуровневыелокальные",
+				"BugsworthCheckЗахватпамятиаддона",
 			}
 
 			for _, name in ipairs(checkboxNames) do
@@ -96,7 +108,7 @@ S:AddCallbackForAddon("!Bugsworth", "Bugsworth", function()
 			for _, child in ipairs({panel:GetChildren()}) do
 				if child:IsObjectType("Slider") then
 					S:HandleSliderFrame(child)
-				elseif child:IsObjectType("Button") and child:GetText() == "Wipe All Errors" then
+				elseif child:IsObjectType("Button") and child:GetText() == "Очистить все ошибки" then
 					S:HandleButton(child)
 				end
 			end
