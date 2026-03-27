@@ -177,6 +177,7 @@ S:AddCallbackForAddon("!Bugsworth", "Bugsworth", function()
 		S:HandleButton(_G.BugsworthTaintSessionBtn)
 		S:HandleButton(_G.BugsworthTaintClearBtn)
 		S:HandleButton(_G.BugsworthTaintCopyBtn)
+		S:HandleButton(_G.BugsworthTaintCopyAllBtn)
 
 		tf.isSkinned = true
 		S:Unhook(BC, "OpenTaintViewer")
