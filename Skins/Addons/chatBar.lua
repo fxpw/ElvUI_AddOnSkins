@@ -17,7 +17,7 @@ S:AddCallbackForAddon("ChatBar", "ChatBar", function()
 	if ChatBar_ButtonScale then
 		ChatBar_ButtonScale = 1
 	end
-
+	-- FIXME TAINT
 	ChatBar_UpdateArt = E.noop
 	ChatBar_Toggle_LargeButtons = E.noop
 
