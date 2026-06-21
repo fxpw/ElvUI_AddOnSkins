@@ -361,7 +361,7 @@ S:AddCallbackForAddon("AdiBags", "AdiBags", function()
 			local alpha = 1 - 0.5 * AdiBags.db.profile.qualityOpacity
 			self.parent.IconTexture:SetVertexColor(1, 1, 1, alpha)
 			self._dimmed = true
-		elseif self.dimmed then
+		elseif self._dimmed then
 			self.parent.IconTexture:SetVertexColor(1, 1, 1, 1)
 			self._dimmed = nil
 		end
@@ -371,7 +371,12 @@ S:AddCallbackForAddon("AdiBags", "AdiBags", function()
 		if not self._searchMode then
 			if self._restoreBorder then
 				local color = qualityColors[self.parent._itemQuality]
-				self.parent:SetBackdropBorderColor(color[1], color[2], color[3], 1)
+				if color then
+					self.parent:SetBackdropBorderColor(color[1], color[2], color[3], 1)
+				else
+					local v = self.parent._itemQuality
+					self.parent:SetBackdropBorderColor(v, v, v, 1)
+				end
 				self._restoreBorder = nil
 			end
 
@@ -502,9 +507,11 @@ S:AddCallbackForAddon("AdiBags", "AdiBags", function()
 	end)
 
 	local AdiBags_SearchHighlight = AdiBags:GetModule("SearchHighlight", true)
-	S:RawHook(AdiBags_SearchHighlight, "UpdateButton", function(self, event, button)
-		button.IconQuestTexture._searchMode = true
-		S.hooks[self].UpdateButton(self, event, button)
-		button.IconQuestTexture._searchMode = nil
-	end)
+	if AdiBags_SearchHighlight then
+		S:RawHook(AdiBags_SearchHighlight, "UpdateButton", function(self, event, button)
+			button.IconQuestTexture._searchMode = true
+			S.hooks[self].UpdateButton(self, event, button)
+			button.IconQuestTexture._searchMode = nil
+		end)
+	end
 end)

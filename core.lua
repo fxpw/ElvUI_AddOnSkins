@@ -117,6 +117,7 @@ local addonList = {
 	"EavesDrop",
 	"CharacterNotes",
 	"Immersion",
+	"Bugsworth",
 }
 local addonAlias = {
 	["DBM"] = "DBM-Core",
@@ -124,6 +125,7 @@ local addonAlias = {
 	["AuctioneerSuite"] = "Auc-Advanced",
 	["_NPCScanOverlay"] = "_NPCScan.Overlay",
 	["ElvinCDs"] = "!ElvinCDs",
+	["Bugsworth"] = "!Bugsworth",
 }
 
 AS.addons = {}

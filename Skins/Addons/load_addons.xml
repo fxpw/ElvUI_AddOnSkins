@@ -106,4 +106,5 @@
 	<Script file="EavesDrop.lua"/>
 	<Script file="CharacterNotes.lua"/>
 	<Script file="Immersion.lua"/>
+	<Script file="bugsworth.lua"/>
 </Ui>
