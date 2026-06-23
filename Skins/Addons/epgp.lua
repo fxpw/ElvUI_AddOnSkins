@@ -274,14 +274,17 @@ S:AddCallbackForAddon("epgp", "epgp", function()
 
 		num = select("#",EPGPLogFrame:GetChildren())
 		local searchBox, searchButt, sizer, closeButton2, export, import, trimLog, undo, redo, scrollParent
-		if num == 11 then
+		if num >= 10 and EPGPSearchEditBox then
 			searchBox, searchButt, sizer, closeButton2, export, import, trimLog, undo, redo, scrollParent = EPGPLogFrame:GetChildren()
 			S:HandleEditBox(searchBox)
 			searchBox:Height(20)
 			searchBox:ClearAllPoints()
 			searchBox:SetPoint("TOPLEFT", EPGPLogFrame, "TOPLEFT", 23, -5)
-			searchBox:SetPoint("TOPRIGHT", EPGPLogFrame, "TOPRIGHT", -117, -5)
 			S:HandleButton(searchButt)
+			searchButt:Size(80, 20)
+			searchButt:ClearAllPoints()
+			searchButt:Point("TOPRIGHT", EPGPLogFrame, "TOPRIGHT", -36, -5)
+			searchBox:SetPoint("TOPRIGHT", searchButt, "TOPLEFT", -4, 0)
 		else
 			sizer, closeButton2, export, import, trimLog, undo, redo, scrollParent = EPGPLogFrame:GetChildren()
 		end
@@ -312,11 +315,17 @@ S:AddCallbackForAddon("epgp", "epgp", function()
 		S:HandleButton(undo)
 		S:HandleButton(redo)
 
-		-- export:Point("BOTTOMLEFT", 8, 8)
-		-- import:Point("LEFT", export, "RIGHT", 3, 0)
+		export:ClearAllPoints()
+		export:Point("BOTTOMLEFT", EPGPLogFrame, "BOTTOMLEFT", 17, 8)
+		import:ClearAllPoints()
+		import:Point("LEFT", export, "RIGHT", 4, 0)
+		trimLog:ClearAllPoints()
+		trimLog:Point("BOTTOM", EPGPLogFrame, "BOTTOM", 0, 8)
 
-		-- undo:Point("BOTTOMRIGHT", -8, 8)
-		-- redo:Point("RIGHT", undo, "LEFT", -3, 0)
+		undo:ClearAllPoints()
+		undo:Point("BOTTOMRIGHT", EPGPLogFrame, "BOTTOMRIGHT", -32, 8)
+		redo:ClearAllPoints()
+		redo:Point("RIGHT", undo, "LEFT", -4, 0)
 
 		sizer:Size(14)
 
