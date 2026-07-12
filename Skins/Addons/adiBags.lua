@@ -161,47 +161,23 @@ S:AddCallbackForAddon("AdiBags", "AdiBags", function()
 			frame.deconstructButton.ttText = L["Deconstruct Mode"]
 			frame.deconstructButton:SetScript("OnEnter", B.Tooltip_Show)
 			frame.deconstructButton:SetScript("OnLeave", function() GameTooltip:Hide() end)
-			frame.deconstructButton:SetScript("OnClick", function(self)
-				local D = B:GetModule("Deconstruct")
-				if not D then return end
-				
-				if not D.DeconstructButton then
-					D.DeconstructButton = self
-				end
-
-				if not D.DeconstructionReal then
-					D:UpdateProfessions()
-					D:ConstructRealDecButton()
-					GameTooltip:HookScript('OnShow', function() D:DeconstructParser() end)
-					GameTooltip:HookScript('OnUpdate', function() D:DeconstructParser() end)
-
-					D:RegisterEvent('SKILL_LINES_CHANGED')
-					D:RegisterEvent('SPELLS_CHANGED')
-					D:RegisterEvent('LEARNED_SPELL_IN_TAB')
-				end
-
-				if D.ToggleMode then
+			frame.deconstructButton:SetScript("OnClick", function()
+				local D = B:GetModule("Deconstruct", true)
+				if D and D:InitializeExternal() then
 					D:ToggleMode()
-					AdiBags:SendMessage("AdiBags_UpdateAllButtons")
 				end
 			end)
+			local D = B:GetModule("Deconstruct", true)
+			if D then
+				D:RegisterDeconstructButton(frame.deconstructButton)
+				D:InitializeExternal()
+			end
 			RegisterFrame(frame.deconstructButton)
 
 			frame:HookScript("OnHide", function()
 				local D = B:GetModule("Deconstruct")
 				if D and D.DeconstructMode then
-					D.DeconstructMode = false
-					if D.DeconstructButton then
-						local normalTex = D.DeconstructButton:GetNormalTexture()
-						if normalTex then normalTex:SetTexture([[Interface\ICONS\INV_Rod_Enchantedcobalt]]) end
-						ActionButton_HideOverlayGlow(D.DeconstructButton)
-					end
-					if D.DeconstructionReal then D.DeconstructionReal:OnLeave() end
-					AdiBags:SendMessage("AdiBags_UpdateAllButtons")
-					
-					-- Keep original ElvUI behavior as well just in case
-					if B.BagFrame then D:UpdateBagSlots(B.BagFrame, false) end
-					if B.BankFrame then D:UpdateBagSlots(B.BankFrame, false) end
+					D:SetMode(false)
 				end
 			end)
 		end
@@ -477,16 +453,9 @@ S:AddCallbackForAddon("AdiBags", "AdiBags", function()
 			local validBag = self.bag
 			if validBag then
 				local itemLink = GetContainerItemLink(self.bag, self.slot)
-				
-				if not D._hasKeyTime or GetTime() > D._hasKeyTime then
-					D._hasKeyCache = false
-					for key in pairs(D.Keys) do
-						if GetItemCount(key) > 0 then D._hasKeyCache = key; break end
-					end
-					D._hasKeyTime = GetTime() + 0.5
-				end
+				local count = select(2, GetContainerItemInfo(self.bag, self.slot)) or 0
 
-				if itemLink and D:CanProcessItem(itemLink, D._hasKeyCache) then
+				if itemLink and D:CanProcessItem(itemLink, D:GetAvailableKey(), count, self.bag, self.slot) then
 					self:SetAlpha(1)
 				else
 					self:SetAlpha(0.3)
