@@ -7,9 +7,11 @@ if not AS:IsAddonLODorEnabled("AdiBags") then return end
 local _G = _G
 local ipairs = ipairs
 local pairs = pairs
+local tonumber = tonumber
 local type = type
 local unpack = unpack
 
+local GetAddOnMetadata = GetAddOnMetadata
 local GetItemInfo = GetItemInfo
 local hooksecurefunc = hooksecurefunc
 
@@ -20,6 +22,18 @@ local TEXTURE_ITEM_QUEST_BORDER = TEXTURE_ITEM_QUEST_BORDER
 
 -- AdiBags by Accidev
 -- https://github.com/accidev/AdiBags-for-Sirus
+
+local REQUIRED_MAJOR, REQUIRED_MINOR = 2, 3
+
+local function IsSupportedVersion()
+	local major, minor = (GetAddOnMetadata("AdiBags", "Version") or ""):match("^(%d+)%.(%d+)")
+	major, minor = tonumber(major), tonumber(minor)
+
+	if not major then return false end
+	if major ~= REQUIRED_MAJOR then return major > REQUIRED_MAJOR end
+
+	return (minor or 0) >= REQUIRED_MINOR
+end
 
 S:AddCallbackForAddon("AdiBags", "AdiBags", function()
 	if not E.private.addOnSkins.AdiBags then return end
@@ -43,6 +57,12 @@ S:AddCallbackForAddon("AdiBags", "AdiBags", function()
 
 	local AdiBags = LibStub("AceAddon-3.0"):GetAddon("AdiBags", true)
 	if not AdiBags then return end
+
+	if not IsSupportedVersion() then
+		E:Print("|cff00bfffAdiBags|r: скин требует версию "
+			.. REQUIRED_MAJOR .. "." .. REQUIRED_MINOR .. " или новее. Обновите аддон.")
+		return
+	end
 
 	local skinnedFrames = {}
 	setmetatable(skinnedFrames, {__mode = "k"})
