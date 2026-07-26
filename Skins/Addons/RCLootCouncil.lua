@@ -39,15 +39,24 @@ S:AddCallbackForAddon("RCLootCouncil", "RCLootCouncil", function()
 
 	local function updateTexCoord(self)
 		local normalTexture = self:GetNormalTexture()
+		if not normalTexture then return end
+
 		normalTexture:SetTexCoord(unpack(E.TexCoords))
 		normalTexture:SetInside()
 	end
 
 	local function skinIconButton(button)
+		if not button then return end
+
 		button:SetTemplate()
 		button:StyleButton(nil, true, true)
-		button:GetNormalTexture():SetDrawLayer("ARTWORK")
-		hooksecurefunc(button, "SetNormalTexture", updateTexCoord)
+
+		local normalTexture = button:GetNormalTexture()
+		if normalTexture then
+			normalTexture:SetDrawLayer("ARTWORK")
+			updateTexCoord(button)
+			hooksecurefunc(button, "SetNormalTexture", updateTexCoord)
+		end
 	end
 
 	local votingFrame = addon:GetModule("RCVotingFrame", true)
@@ -103,15 +112,21 @@ S:AddCallbackForAddon("RCLootCouncil", "RCLootCouncil", function()
 	local lootFrame = addon:GetModule("RCLootFrame", true)
 	if lootFrame then
 		local function updateTexCoord(self)
-			self.icon:GetNormalTexture():SetTexCoord(unpack(E.TexCoords))
+			local icon = self.icon or self.itemIcon or self.button or self
+			local normalTexture = icon and icon.GetNormalTexture and icon:GetNormalTexture()
+			if normalTexture then
+				normalTexture:SetTexCoord(unpack(E.TexCoords))
+				normalTexture:SetInside()
+			end
 		end
 
 		S:RawHook(lootFrame, "GetEntry", function(self, ...)
 			local frame = S.hooks[self].GetEntry(self, ...)
 
 			frame:SetTemplate("Transparent")
-			skinIconButton(frame.icon)
+			skinIconButton(frame.icon or frame.itemIcon or frame.button)
 			hooksecurefunc(frame, "Show", updateTexCoord)
+			updateTexCoord(frame)
 
 			return frame
 		end)
