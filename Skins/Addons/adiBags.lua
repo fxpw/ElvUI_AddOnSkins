@@ -6,9 +6,12 @@ if not AS:IsAddonLODorEnabled("AdiBags") then return end
 
 local _G = _G
 local ipairs = ipairs
+local pairs = pairs
+local tonumber = tonumber
 local type = type
 local unpack = unpack
 
+local GetAddOnMetadata = GetAddOnMetadata
 local GetItemInfo = GetItemInfo
 local hooksecurefunc = hooksecurefunc
 
@@ -19,6 +22,18 @@ local TEXTURE_ITEM_QUEST_BORDER = TEXTURE_ITEM_QUEST_BORDER
 
 -- AdiBags by Accidev
 -- https://github.com/accidev/AdiBags-for-Sirus
+
+local REQUIRED_MAJOR, REQUIRED_MINOR = 2, 3
+
+local function IsSupportedVersion()
+	local major, minor = (GetAddOnMetadata("AdiBags", "Version") or ""):match("^(%d+)%.(%d+)")
+	major, minor = tonumber(major), tonumber(minor)
+
+	if not major then return false end
+	if major ~= REQUIRED_MAJOR then return major > REQUIRED_MAJOR end
+
+	return (minor or 0) >= REQUIRED_MINOR
+end
 
 S:AddCallbackForAddon("AdiBags", "AdiBags", function()
 	if not E.private.addOnSkins.AdiBags then return end
@@ -42,6 +57,12 @@ S:AddCallbackForAddon("AdiBags", "AdiBags", function()
 
 	local AdiBags = LibStub("AceAddon-3.0"):GetAddon("AdiBags", true)
 	if not AdiBags then return end
+
+	if not IsSupportedVersion() then
+		E:Print("|cff00bfffAdiBags|r: скин требует версию "
+			.. REQUIRED_MAJOR .. "." .. REQUIRED_MINOR .. " или новее. Обновите аддон.")
+		return
+	end
 
 	local skinnedFrames = {}
 	setmetatable(skinnedFrames, {__mode = "k"})
@@ -114,10 +135,6 @@ S:AddCallbackForAddon("AdiBags", "AdiBags", function()
 		FixBorder(frame)
 	end
 
-	hooksecurefunc(AdiBags, "ResetBagPositions", function(self)
-		self.db.profile.scale = 1
-		self:LayoutBags()
-	end)
 
 	hooksecurefunc(AdiBags, "LayoutBags", function()
 		for frame in pairs(skinnedFrames) do
@@ -138,6 +155,14 @@ S:AddCallbackForAddon("AdiBags", "AdiBags", function()
 		end)
 	end
 
+	local Deconstruct
+	local function GetDeconstruct()
+		if not Deconstruct and B then
+			Deconstruct = B:GetModule("Deconstruct", true)
+		end
+		return Deconstruct
+	end
+
 	local function SkinContainer(frame)
 		frame:SetTemplate("Transparent")
 		RegisterFrame(frame)
@@ -146,7 +171,7 @@ S:AddCallbackForAddon("AdiBags", "AdiBags", function()
 
 		local B = E:GetModule("Bags")
 
-		if tonumber(E.version) >= 7.99 then
+		if tonumber(E.version) >= 7.99 and E.db.bags.deconstruct then
 			frame.deconstructButton = CreateFrame("Button", nil, frame)
 			frame.deconstructButton:Size(16 + E.Border)
 			frame.deconstructButton:SetTemplate()
@@ -162,24 +187,26 @@ S:AddCallbackForAddon("AdiBags", "AdiBags", function()
 			frame.deconstructButton:SetScript("OnEnter", B.Tooltip_Show)
 			frame.deconstructButton:SetScript("OnLeave", function() GameTooltip:Hide() end)
 			frame.deconstructButton:SetScript("OnClick", function()
-				local D = B:GetModule("Deconstruct", true)
+				local D = GetDeconstruct()
 				if D and D:InitializeExternal() then
 					D:ToggleMode()
 				end
 			end)
-			local D = B:GetModule("Deconstruct", true)
+			local D = GetDeconstruct()
 			if D then
 				D:RegisterDeconstructButton(frame.deconstructButton)
 				D:InitializeExternal()
 			end
 			RegisterFrame(frame.deconstructButton)
 
-			frame:HookScript("OnHide", function()
-				local D = B:GetModule("Deconstruct")
-				if D and D.DeconstructMode then
-					D:SetMode(false)
-				end
-			end)
+			if not frame.isBank then
+				frame:HookScript("OnHide", function()
+					local D = GetDeconstruct()
+					if D and D.DeconstructMode then
+						D:SetMode(false)
+					end
+				end)
+			end
 		end
 
 		frame.sortButton = CreateFrame("Button", nil, frame)
@@ -257,6 +284,26 @@ S:AddCallbackForAddon("AdiBags", "AdiBags", function()
 		return frame
 	end)
 
+	local function ReSkinFrame(frame)
+		if not skinnedFrames[frame] then return end
+		frame:SetTemplate("Transparent")
+		frame.SkinMult = nil
+		FixBorder(frame)
+	end
+
+	local ContainerClass = AdiBags:GetClass("Container")
+	if ContainerClass then
+		hooksecurefunc(ContainerClass.prototype, "UpdateSkin", function(self)
+			if not skinnedFrames[self] then return end
+
+			ReSkinFrame(self)
+
+			if self.BagSlotPanel then
+				E:Delay(0, ReSkinFrame, self.BagSlotPanel)
+			end
+		end)
+	end
+
 	local qualityColors = {
 		["questStarter"] = {E.db.bags.colors.items.questStarter.r, E.db.bags.colors.items.questStarter.g, E.db.bags.colors.items.questStarter.b},
 		["questItem"] =	{E.db.bags.colors.items.questItem.r, E.db.bags.colors.items.questItem.g, E.db.bags.colors.items.questItem.b}
@@ -287,7 +334,6 @@ S:AddCallbackForAddon("AdiBags", "AdiBags", function()
 				RegisterFrame(widget)
 
 				if widget.clearButton then
-					widget.clearButton:StripTextures()
 					widget.clearButton:SetText("")
 					S:HandleCloseButton(widget.clearButton)
 				end
@@ -295,32 +341,24 @@ S:AddCallbackForAddon("AdiBags", "AdiBags", function()
 		end)
 	end
 
+	local function setBorderColor(button, r, g, b)
+		button._elvBorderR, button._elvBorderG, button._elvBorderB = r, g, b
+		button:SetBackdropBorderColor(r, g, b, 1)
+	end
+
 	local function updateBorderTexture(self, texture, g, b)
 		if texture == TEXTURE_ITEM_QUEST_BANG then
 			self:SetAlpha(1)
-			self.parent:SetBackdropBorderColor(unpack(qualityColors.questStarter))
-			self.parent._itemQuality = "questStarter"
+			setBorderColor(self.parent, unpack(qualityColors.questStarter))
 		else
 			self:SetAlpha(0)
 
 			if texture == TEXTURE_ITEM_QUEST_BORDER then
-				self.parent:SetBackdropBorderColor(unpack(qualityColors.questItem))
-				self.parent._itemQuality = "questItem"
+				setBorderColor(self.parent, unpack(qualityColors.questItem))
 			elseif texture == "Interface\\Buttons\\UI-ActionButton-Border" then
-				-- await for vertex color
 				self.awaitColor = true
-
-				local _, _, quality = GetItemInfo(self.parent.itemId)
-				if quality and quality >= ITEM_QUALITY_UNCOMMON then
-					self.parent._itemQuality = quality
-				elseif quality == ITEM_QUALITY_POOR and AdiBags.db.profile.dimJunk then
-					self.parent._itemQuality = 1 - 0.5 * AdiBags.db.profile.qualityOpacity
-				end
-
-				return
 			elseif type(texture) == "number" then
-				self.parent._itemQuality = 1
-				self.parent:SetBackdropBorderColor(texture, g, b)
+				setBorderColor(self.parent, texture, g, b)
 			end
 		end
 	end
@@ -328,8 +366,8 @@ S:AddCallbackForAddon("AdiBags", "AdiBags", function()
 	local function updateBorderVertexColor(self, r, g, b)
 		if not self.awaitColor then return end
 
-		self.parent:SetBackdropBorderColor(r, g, b)
 		self.awaitColor = nil
+		setBorderColor(self.parent, r, g, b)
 	end
 
 	local function updateDimJunk(self, mode)
@@ -344,41 +382,27 @@ S:AddCallbackForAddon("AdiBags", "AdiBags", function()
 	end
 
 	local function updateBorderOnHide(self)
-		if not self._searchMode then
-			if self._restoreBorder then
-				local color = qualityColors[self.parent._itemQuality]
-				if color then
-					self.parent:SetBackdropBorderColor(color[1], color[2], color[3], 1)
-				else
-					local v = self.parent._itemQuality
-					self.parent:SetBackdropBorderColor(v, v, v, 1)
-				end
-				self._restoreBorder = nil
-			end
+		local parent = self.parent
 
-			self.parent:SetBackdropBorderColor(unpack(E.media.bordercolor))
-			self.parent.IconTexture:SetVertexColor(1, 1, 1, 1)
-		elseif self.parent._itemQuality then
-			self._restoreBorder = true
-
-			local color = qualityColors[self.parent._itemQuality]
-			if color then
-				self.parent:SetBackdropBorderColor(color[1], color[2], color[3], 0.2)
-			else
-				color = self.parent._itemQuality
-				self.parent:SetBackdropBorderColor(color, color, color, 0.2)
+		if self._searchMode then
+			if parent._elvBorderR then
+				parent:SetBackdropBorderColor(parent._elvBorderR, parent._elvBorderG, parent._elvBorderB, 0.2)
 			end
+			return
 		end
+
+		parent._elvBorderR, parent._elvBorderG, parent._elvBorderB = nil, nil, nil
+		parent:SetBackdropBorderColor(unpack(E.media.bordercolor))
+		parent.IconTexture:SetVertexColor(1, 1, 1, 1)
 	end
 
 	local SectionClass = AdiBags:GetClass("Section")
 	if SectionClass then
 		hooksecurefunc(SectionClass.prototype, "OnCreate", function(self)
 			local header = self.Header
-			if header:GetHighlightTexture() then
-				header:GetHighlightTexture():SetTexture(nil)
-			else
-				header:SetHighlightTexture("")
+			local highlight = header:GetHighlightTexture()
+			if highlight then
+				highlight:SetTexture(nil)
 			end
 
 			local r, g, b = unpack(E.media.rgbvaluecolor)
@@ -416,6 +440,9 @@ S:AddCallbackForAddon("AdiBags", "AdiBags", function()
 
 	local ItemButtonClass = AdiBags:GetClass("ItemButton")
 	hooksecurefunc(ItemButtonClass.prototype, "OnCreate", function(self)
+		if self._elvSkinned then return end
+		self._elvSkinned = true
+
 		self.NormalTexture:SetTexture(nil)
 		self:SetTemplate("Default", true)
 		self:StyleButton()
@@ -446,8 +473,7 @@ S:AddCallbackForAddon("AdiBags", "AdiBags", function()
 			self.IconTexture:SetTexture(nil)
 		end
 
-		local B = E:GetModule("Bags", true)
-		local D = B and B:GetModule("Deconstruct", true)
+		local D = GetDeconstruct()
 
 		if D and D.DeconstructMode then
 			local validBag = self.bag
@@ -462,16 +488,7 @@ S:AddCallbackForAddon("AdiBags", "AdiBags", function()
 				end
 			end
 		else
-			if self.hasItem then
-				local _, _, itemQuality = GetItemInfo(self.itemId)
-				if itemQuality == ITEM_QUALITY_POOR and AdiBags.db.profile.dimJunk then
-					self:SetAlpha(0.5)
-				else
-					self:SetAlpha(1)
-				end
-			else
-				self:SetAlpha(1)
-			end
+			self:SetAlpha(1)
 		end
 	end)
 
