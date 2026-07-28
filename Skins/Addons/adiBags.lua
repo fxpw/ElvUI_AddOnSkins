@@ -23,7 +23,7 @@ local TEXTURE_ITEM_QUEST_BORDER = TEXTURE_ITEM_QUEST_BORDER
 -- AdiBags by Accidev
 -- https://github.com/accidev/AdiBags-for-Sirus
 
-local REQUIRED_MAJOR, REQUIRED_MINOR = 2, 3
+local REQUIRED_MAJOR, REQUIRED_MINOR = 2, 4
 
 local function IsSupportedVersion()
 	local major, minor = (GetAddOnMetadata("AdiBags", "Version") or ""):match("^(%d+)%.(%d+)")
@@ -304,6 +304,23 @@ S:AddCallbackForAddon("AdiBags", "AdiBags", function()
 		end)
 	end
 
+	local function SkinPreviewContainer(frame)
+		if not frame or skinnedFrames[frame] then return end
+
+		RegisterFrame(frame)
+		S:HandleCloseButton(frame.CloseButton)
+
+		frame:UpdateSkin()
+	end
+
+	local PreviewModule = AdiBags:GetModule("Preview", true)
+	if PreviewModule then
+		hooksecurefunc(PreviewModule, "GetFrame", function(self)
+			SkinPreviewContainer(self.frame)
+		end)
+		SkinPreviewContainer(PreviewModule.frame)
+	end
+
 	local qualityColors = {
 		["questStarter"] = {E.db.bags.colors.items.questStarter.r, E.db.bags.colors.items.questStarter.g, E.db.bags.colors.items.questStarter.b},
 		["questItem"] =	{E.db.bags.colors.items.questItem.r, E.db.bags.colors.items.questItem.g, E.db.bags.colors.items.questItem.b}
@@ -491,6 +508,49 @@ S:AddCallbackForAddon("AdiBags", "AdiBags", function()
 			self:SetAlpha(1)
 		end
 	end)
+
+	local PreviewButtonClass = AdiBags:GetClass("PreviewItemButton")
+	if PreviewButtonClass then
+		hooksecurefunc(PreviewButtonClass.prototype, "OnCreate", function(self)
+			if self._elvSkinned then return end
+			self._elvSkinned = true
+
+			self.NormalTexture:SetTexture(nil)
+			self:SetTemplate("Default", true)
+
+			for _, region in ipairs({self:GetRegions()}) do
+				if region.GetDrawLayer and region:GetDrawLayer() == "HIGHLIGHT" then
+					region:SetTexture(1, 1, 1, 0.3)
+					region:SetBlendMode("BLEND")
+					region:SetInside()
+				end
+			end
+
+			self.IconTexture:SetDrawLayer("BORDER")
+			self.IconTexture:SetInside()
+			self.IconTexture:SetTexCoord(unpack(E.TexCoords))
+			self.IconTexture.SetTexCoord = E.noop
+
+			self.IconQuestTexture:SetInside()
+			self.IconQuestTexture:SetTexCoord(unpack(E.TexCoords))
+			self.IconQuestTexture.SetTexCoord = E.noop
+			self.IconQuestTexture.parent = self
+			self.IconQuestTexture.SetTexture = updateBorderTexture
+			self.IconQuestTexture.SetVertexColor = updateBorderVertexColor
+			self.IconQuestTexture.SetBlendMode = updateDimJunk
+			hooksecurefunc(self.IconQuestTexture, "Hide", updateBorderOnHide)
+
+			RegisterFrame(self)
+		end)
+
+		hooksecurefunc(PreviewButtonClass.prototype, "Update", function(self)
+			if not self:CanUpdate() then return end
+
+			if not self.texture then
+				self.IconTexture:SetTexture(nil)
+			end
+		end)
+	end
 
 	local AdiBags_SearchHighlight = AdiBags:GetModule("SearchHighlight", true)
 	if AdiBags_SearchHighlight then
