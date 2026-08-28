@@ -539,10 +539,12 @@ S:AddCallbackForAddon("Auctionator", "Auctionator", function()
 	if not E.private.addOnSkins.Auctionator then return end
 
 	hooksecurefunc(AuctionatorTabContainerMixin, "OnLoad", function()
+		local previousTab
 		for _, name in ipairs({ "AuctionatorTabs_ShoppingLists", "AuctionatorTabs_Selling", "AuctionatorTabs_Cancelling", "AuctionatorTabs_Auctionator" }) do
 			local tab = _G[name]
 			if tab then
-				S:HandleTab(tab)
+				S:HandleSirusTab(tab, previousTab)
+				previousTab = tab
 			end
 		end
 
