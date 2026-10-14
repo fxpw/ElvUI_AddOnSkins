@@ -587,10 +587,8 @@ S:AddCallbackForAddon("WIM", "WIM", function()
 		end)
 	end
 
-	TutorialFrameTop.Show = E.noop
-	TutorialFrameTop:Hide()
-	TutorialFrameBottom.Show = E.noop
-	TutorialFrameBottom:Hide()
+	TutorialFrameTop:Kill()
+	TutorialFrameBottom:Kill()
 
 	local WIMMenu = _G["WIM3Menu"]
 	local WIMGroup1 = _G["WIM3MenuGroup1"]

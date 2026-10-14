@@ -5,8 +5,8 @@ local AS = E:GetModule("AddOnSkins")
 if not AS:IsAddonLODorEnabled("Overachiever_Tabs") then return end
 
 local _G = _G
-local getmetatable = getmetatable
 local ipairs = ipairs
+local hooksecurefunc = hooksecurefunc
 
 -- Overachiever 0.56
 -- https://www.curseforge.com/wow/addons/overachiever/files/443622
@@ -19,7 +19,7 @@ S:AddCallbackForAddon("Overachiever_Tabs", "Overachiever", function()
 		S:HandleTab(tab)
 		tab:Point("LEFT", _G["AchievementFrameTab"..(i-1)], "RIGHT", -15, 0)
 		tab.text:Point("CENTER", 0, 2)
-		tab.text.SetPoint = E.noop
+		E:LockPoints(tab.text)
 	end
 
 	local leftFrame = _G["Overachiever_LeftFrame"]
@@ -60,20 +60,18 @@ S:AddCallbackForAddon("Overachiever_Tabs", "Overachiever", function()
 		scrollBar:Point("TOPLEFT", frame.scrollFrame, "TOPRIGHT", 5, -17)
 		scrollBar:Point("BOTTOMLEFT", frame.scrollFrame, "BOTTOMRIGHT", 5, 15)
 
-		scrollBar.Show = function(self)
+		hooksecurefunc(scrollBar, "Show", function()
 			frame:SetWidth(500)
 			for _, button in ipairs(frame.buttons) do
 				button:SetWidth(496)
 			end
-			getmetatable(self).__index.Show(self)
-		end
+		end)
 
-		scrollBar.Hide = function(self)
+		hooksecurefunc(scrollBar, "Hide", function()
 			frame:SetWidth(521)
 			for _, button in ipairs(frame.buttons) do
 				button:SetWidth(517)
 			end
-			getmetatable(self).__index.Hide(self)
-		end
+		end)
 	end
 end)
