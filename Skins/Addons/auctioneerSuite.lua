@@ -473,10 +473,10 @@ S:AddCallbackForAddon("Auc-Advanced", "Auc-Advanced", function()
 			BrowseSearchCountText:Point("BOTTOMRIGHT", tex, "BOTTOMRIGHT", -40, 20)
 
 			-- prevent main AH skin from repointing
-			BrowseButton1.SetPoint = E.noop
-			BrowsePrevPageButton.SetPoint = E.noop
-			BrowseNextPageButton.SetPoint = E.noop
-			BrowseSearchCountText.SetPoint = E.noop
+			E:LockPoints(BrowseButton1)
+			E:LockPoints(BrowsePrevPageButton)
+			E:LockPoints(BrowseNextPageButton)
+			E:LockPoints(BrowseSearchCountText)
 
 			S:Unhook(private, "HookAH")
 		end)

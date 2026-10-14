@@ -67,7 +67,7 @@ S:AddCallbackForAddon("Mapster", "Mapster", function()
 
 		WorldMapFrameSizeDownButton:ClearAllPoints()
 		WorldMapFrameSizeDownButton:Point("RIGHT", WorldMapFrameCloseButton, "LEFT", 4, 0)
-		WorldMapFrameSizeDownButton.SetPoint = E.noop
+		E:LockPoints(WorldMapFrameSizeDownButton)
 		WorldMapFrameSizeDownButton:GetHighlightTexture():Kill()
 		S:HandleNextPrevButton(WorldMapFrameSizeDownButton, nil, nil, true)
 		WorldMapFrameSizeDownButton:Size(26)

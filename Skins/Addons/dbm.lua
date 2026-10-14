@@ -528,13 +528,14 @@ S:AddCallbackForAddon("DBM-Core", "DBM-Core", function()
 			return S.hooks[DBM].AddWarning(self, text, ...)
 		end)
 	else
-		S:RawHook("RaidNotice_AddMessage", function(noticeFrame, textString, colorInfo)
-			if find(textString, " |T") then
-				textString = gsub(textString, "(:12:12)", ":18:18:0:0:64:64:5:59:5:59")
+		hooksecurefunc("RaidNotice_SetSlot", function(slotFrame, textString)
+			if textString and find(textString, " |T") then
+				local text, count = gsub(textString, "(:12:12)", ":18:18:0:0:64:64:5:59:5:59")
+				if count > 0 then
+					slotFrame:SetText(text)
+				end
 			end
-
-			return S.hooks.RaidNotice_AddMessage(noticeFrame, textString, colorInfo)
-		end, true)
+		end)
 	end
 
 	if DBM.ShowUpdateReminder then
