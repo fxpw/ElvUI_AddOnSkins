@@ -7,6 +7,13 @@ if not AS:IsAddonLODorEnabled("ChatBar") then return end
 local _G = _G
 local abs = math.abs
 
+-- Эти константы в ChatBar.lua объявлены как local (не доступны извне),
+-- поэтому дублируем их значения здесь, иначе sliding-анимация падает
+-- с ошибкой "attempt to compare number with nil" / "arithmetic on nil".
+local ConstantVelocityModifier = 1.25
+local ConstantJerk = 3 * ConstantVelocityModifier
+local ConstantSnapLimit = 2
+
 -- ChatBar 3.1
 
 S:AddCallbackForAddon("ChatBar", "ChatBar", function()
@@ -44,7 +51,7 @@ S:AddCallbackForAddon("ChatBar", "ChatBar", function()
 		flash:SetTexture(1, 1, 1, 0.5)
 
 		highlight:SetBlendMode("MOD")
-		flash:SetTexture("MOD")
+		flash:SetBlendMode("MOD")
 	end
 
 	ChatBarFrame:SetScript("OnUpdate", function(self, elapsed)
