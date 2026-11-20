@@ -10,6 +10,14 @@ S:AddCallbackForAddon("!Bugsworth", "Bugsworth", function()
 	local BC = _G.Bugsworth
 	if not BC then return end
 
+	local function skinCopyAllButton()
+		local btn = _G.BugsworthCopyAllButton
+		if not btn or btn.isSkinned then return end
+
+		S:HandleButton(btn)
+		btn.isSkinned = true
+	end
+
 	S:SecureHook(BC, "OpenViewer", function()
 		local frame = _G.BugsworthFrame
 		if not frame or frame.isSkinned then return end
@@ -53,6 +61,7 @@ S:AddCallbackForAddon("!Bugsworth", "Bugsworth", function()
 		S:HandleButton(_G.BugsworthPrevButton)
 		S:HandleButton(_G.BugsworthClearButton)
 		S:HandleButton(_G.BugsworthCopyButton)
+		skinCopyAllButton()
 
 		local function skinTab(tab)
 			if not tab then return end
@@ -76,6 +85,12 @@ S:AddCallbackForAddon("!Bugsworth", "Bugsworth", function()
 		frame.isSkinned = true
 		S:Unhook(BC, "OpenViewer")
 	end)
+
+	-- Страховка: если кнопка была создана уже после скиннинга вьюера
+	-- (или вьюер открывался до загрузки AddOnSkins), доскиним её при клике.
+	if BC.ShowCopyAllPopup then
+		S:SecureHook(BC, "ShowCopyAllPopup", skinCopyAllButton)
+	end
 
 	local configPanel
 	for _, cat in ipairs(INTERFACEOPTIONS_ADDONCATEGORIES) do
